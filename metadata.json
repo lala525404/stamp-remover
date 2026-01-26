@@ -1,0 +1,7 @@
+{
+  "name": "인감 누끼",
+  "description": "A professional-grade tool designed to extract red seals and stamps from documents with high sensitivity, removing white backgrounds and preserving intricate details.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
