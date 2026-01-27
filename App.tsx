@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { ProcessingSettings } from './types';
 import { processSealImage, upscaleAndSharpen, traceToSvg } from './utils/imageProcessor';
@@ -63,6 +62,10 @@ const App: React.FC = () => {
         setProcessedImage(null);
         setUpscaledImage(null);
         setCurrentScale(1);
+        // 이미지가 로드되면 툴 위치로 스크롤
+        setTimeout(() => {
+            document.getElementById('tool')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
       };
       reader.readAsDataURL(file);
     }
@@ -203,11 +206,97 @@ const App: React.FC = () => {
           </div>
         </header>
 
-        {/* 메인 툴 영역 */}
-        <div id="tool" className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-          <div className="lg:col-span-4 space-y-6">
-            <section className="bg-white p-8 rounded-[32px] shadow-2xl shadow-slate-200/50 border border-slate-50">
-              <h2 className="text-xl font-bold mb-6 flex items-center gap-3">
+        {/* 메인 툴 영역 - 모바일 레이아웃 개선 적용 */}
+        {/* PC에서는 좌우(이미지 왼쪽, 설정 오른쪽), 모바일에서는 상하(이미지 위, 설정 아래) 구조로 변경 */}
+        <div id="tool" className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          
+          {/* 1. 이미지 영역 (모바일: 최상단 고정 / PC: 왼쪽 배치) */}
+          <div className="lg:col-span-8 space-y-8 order-1 lg:order-1">
+            {!image ? (
+              <div className="aspect-[16/10] bg-white rounded-[48px] border-4 border-dashed border-slate-100 flex flex-col items-center justify-center p-12 transition-all hover:border-red-200 hover:bg-red-50/20 group cursor-pointer relative shadow-inner overflow-hidden">
+                <input 
+                  type="file" 
+                  accept="image/*" 
+                  onChange={handleFileUpload}
+                  className="absolute inset-0 opacity-0 cursor-pointer z-10"
+                />
+                <div className="w-28 h-28 bg-white shadow-xl shadow-slate-200/50 text-red-600 rounded-[32px] flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-700">
+                  <i className="fa-solid fa-cloud-arrow-up text-4xl"></i>
+                </div>
+                <h3 className="text-3xl font-black text-slate-800 mb-4 tracking-tight">인감 이미지 가져오기</h3>
+                <p className="text-slate-400 text-center max-w-sm leading-relaxed font-medium">
+                  여기를 클릭하거나 파일을 드래그하여 <br/>도장 이미지를 업로드하세요.
+                </p>
+                <div className="mt-12 flex items-center gap-6 opacity-30">
+                  <i className="fa-solid fa-image text-2xl"></i>
+                  <i className="fa-solid fa-file-pdf text-2xl"></i>
+                  <i className="fa-solid fa-file-image text-2xl"></i>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+                {/* 모바일 Sticky Header 적용 부분 */}
+                <div className="sticky top-16 z-40 bg-white/80 backdrop-blur-md -mx-4 px-4 py-4 lg:static lg:bg-transparent lg:p-0 lg:mx-0 shadow-sm lg:shadow-none border-b border-slate-200/50 lg:border-none rounded-b-[32px] lg:rounded-none transition-all">
+                    <div className="bg-white p-2 lg:p-6 rounded-[32px] lg:rounded-[48px] shadow-xl lg:shadow-2xl shadow-slate-200/50 border border-slate-50 relative">
+                        {/* 프리뷰 컨트롤바 */}
+                        <div className="flex justify-between items-center mb-4 px-2">
+                        <div className="flex items-center gap-2 lg:gap-3">
+                            <div className="w-1.5 h-1.5 lg:w-2 lg:h-2 bg-green-500 rounded-full animate-ping"></div>
+                            <p className="text-[10px] lg:text-xs font-bold text-slate-400 uppercase tracking-widest">Preview</p>
+                        </div>
+                        <div className="flex bg-slate-100 rounded-xl p-1 gap-1 shadow-inner scale-90 lg:scale-100 origin-right">
+                            {(['checkerboard', 'white', 'black', 'blue', 'green'] as PreviewBg[]).map((bg) => (
+                            <button 
+                                key={bg}
+                                onClick={() => setPreviewBg(bg)}
+                                className={`w-8 h-8 lg:w-10 lg:h-10 rounded-lg flex items-center justify-center transition-all ${previewBg === bg ? 'bg-white shadow-md scale-110 ring-1 ring-slate-200' : 'hover:scale-105'}`}
+                            >
+                                {bg === 'checkerboard' ? <i className="fa-solid fa-chess-board text-[10px] lg:text-xs text-slate-400"></i> : 
+                                <div className={`w-4 h-4 lg:w-5 lg:h-5 rounded-md ${
+                                bg === 'white' ? 'bg-white border border-slate-200' : 
+                                bg === 'black' ? 'bg-slate-900' : 
+                                bg === 'blue' ? 'bg-blue-500' : 'bg-emerald-500'
+                                }`}></div>}
+                            </button>
+                            ))}
+                        </div>
+                        </div>
+                        
+                        <div className={`aspect-square lg:aspect-video ${getPreviewBgClass()} rounded-[24px] lg:rounded-[40px] overflow-hidden flex items-center justify-center border border-slate-100 transition-all duration-700 shadow-inner relative group`}>
+                        {(isProcessing || isUpscaling || isVectorizing) && (
+                            <div className="absolute inset-0 z-20 bg-white/60 backdrop-blur-xl flex flex-col items-center justify-center">
+                            <div className="w-10 h-10 lg:w-14 lg:h-14 border-[4px] lg:border-[5px] border-red-50 border-t-red-600 rounded-full animate-spin mb-4 lg:mb-6"></div>
+                            <span className="font-black text-slate-900 tracking-tighter text-sm lg:text-lg">처리 중...</span>
+                            </div>
+                        )}
+                        
+                        {upscaledImage ? (
+                            <img src={upscaledImage} alt="Upscaled Result" className="max-h-[85%] max-w-[85%] object-contain drop-shadow-2xl transition-transform duration-700 group-hover:scale-105" />
+                        ) : processedImage && (
+                            <img src={processedImage} alt="Processed Result" className="max-h-[85%] max-w-[85%] object-contain drop-shadow-xl transition-transform duration-700 group-hover:scale-105" />
+                        )}
+                        
+                        <canvas ref={processedCanvasRef} className="hidden" />
+                        <canvas ref={upscaleCanvasRef} className="hidden" />
+                        </div>
+                    </div>
+                </div>
+
+                {/* 하단 버튼 그룹 */}
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 px-2 lg:px-0">
+                  <button onClick={() => setImage(null)} className="px-4 py-4 bg-slate-50 hover:bg-slate-200 text-slate-600 rounded-[20px] font-bold text-sm transition-all flex items-center justify-center gap-2 border border-slate-100 shadow-sm"><i className="fa-solid fa-arrow-left"></i> 처음으로</button>
+                  <button onClick={() => handleUpscale(2)} disabled={!processedImage || isUpscaling} className="py-4 bg-sky-50 text-sky-700 rounded-[20px] font-bold text-sm hover:bg-sky-100 transition-all flex items-center justify-center gap-2 disabled:opacity-50"><i className="fa-solid fa-expand"></i> 화질 개선</button>
+                  <button onClick={handleDownloadPng} disabled={!processedImage} className="py-4 bg-red-600 hover:bg-red-700 text-white rounded-[20px] font-bold text-sm transition-all shadow-xl shadow-red-200 flex items-center justify-center gap-2 disabled:opacity-50"><i className="fa-solid fa-file-export"></i> PNG</button>
+                  <button onClick={handleDownloadVector} disabled={!processedImage || isVectorizing} className="py-4 bg-slate-900 hover:bg-black text-white rounded-[20px] font-bold text-sm transition-all shadow-xl shadow-slate-300 flex items-center justify-center gap-2 disabled:opacity-50"><i className="fa-solid fa-bezier-curve"></i> SVG</button>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* 2. 설정 영역 (모바일: 이미지 아래 / PC: 오른쪽 배치) */}
+          <div className="lg:col-span-4 space-y-6 order-2 lg:order-2">
+            <section className="bg-white p-6 lg:p-8 rounded-[32px] shadow-2xl shadow-slate-200/50 border border-slate-50">
+              <h2 className="text-lg lg:text-xl font-bold mb-6 flex items-center gap-3">
                 <span className="w-1.5 h-6 bg-red-600 rounded-full"></span>
                 추출 옵션 설정
               </h2>
@@ -257,8 +346,8 @@ const App: React.FC = () => {
               </div>
             </section>
 
-            <section className="bg-white p-8 rounded-[32px] shadow-2xl shadow-slate-200/50 border border-slate-50">
-              <h2 className="text-xl font-bold mb-6 flex items-center gap-3">
+            <section className="bg-white p-6 lg:p-8 rounded-[32px] shadow-2xl shadow-slate-200/50 border border-slate-50">
+              <h2 className="text-lg lg:text-xl font-bold mb-6 flex items-center gap-3">
                 <span className="w-1.5 h-6 bg-orange-500 rounded-full"></span>
                 전문적인 리컬러
               </h2>
@@ -289,7 +378,7 @@ const App: React.FC = () => {
               </div>
             </section>
 
-            <section className="bg-slate-900 p-8 rounded-[32px] text-white overflow-hidden relative group">
+            <section className="bg-slate-900 p-6 lg:p-8 rounded-[32px] text-white overflow-hidden relative group">
               <div className="absolute -top-10 -right-10 w-40 h-40 bg-red-600/20 blur-[80px] rounded-full group-hover:bg-red-600/40 transition-all duration-700"></div>
               <h3 className="text-sm font-bold uppercase tracking-widest mb-6 flex items-center gap-2">
                 <i className="fa-solid fa-sparkles text-red-500"></i>
@@ -315,85 +404,9 @@ const App: React.FC = () => {
             </section>
           </div>
 
-          <div className="lg:col-span-8 space-y-8">
-            {!image ? (
-              <div className="aspect-[16/10] bg-white rounded-[48px] border-4 border-dashed border-slate-100 flex flex-col items-center justify-center p-12 transition-all hover:border-red-200 hover:bg-red-50/20 group cursor-pointer relative shadow-inner overflow-hidden">
-                <input 
-                  type="file" 
-                  accept="image/*" 
-                  onChange={handleFileUpload}
-                  className="absolute inset-0 opacity-0 cursor-pointer z-10"
-                />
-                <div className="w-28 h-28 bg-white shadow-xl shadow-slate-200/50 text-red-600 rounded-[32px] flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-700">
-                  <i className="fa-solid fa-cloud-arrow-up text-4xl"></i>
-                </div>
-                <h3 className="text-3xl font-black text-slate-800 mb-4 tracking-tight">인감 이미지 가져오기</h3>
-                <p className="text-slate-400 text-center max-w-sm leading-relaxed font-medium">
-                  여기를 클릭하거나 파일을 드래그하여 <br/>도장 이미지를 업로드하세요.
-                </p>
-                <div className="mt-12 flex items-center gap-6 opacity-30">
-                  <i className="fa-solid fa-image text-2xl"></i>
-                  <i className="fa-solid fa-file-pdf text-2xl"></i>
-                  <i className="fa-solid fa-file-image text-2xl"></i>
-                </div>
-              </div>
-            ) : (
-              <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-                <div className="bg-white p-6 rounded-[48px] shadow-2xl shadow-slate-200/50 border border-slate-50 relative">
-                    <div className="flex justify-between items-center mb-6 px-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-2 h-2 bg-green-500 rounded-full animate-ping"></div>
-                        <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Real-time Result</p>
-                      </div>
-                      <div className="flex bg-slate-100 rounded-2xl p-1.5 gap-1.5 shadow-inner">
-                        {(['checkerboard', 'white', 'black', 'blue', 'green'] as PreviewBg[]).map((bg) => (
-                          <button 
-                            key={bg}
-                            onClick={() => setPreviewBg(bg)}
-                            className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${previewBg === bg ? 'bg-white shadow-md scale-110 ring-1 ring-slate-200' : 'hover:scale-105'}`}
-                          >
-                            {bg === 'checkerboard' ? <i className="fa-solid fa-chess-board text-xs text-slate-400"></i> : 
-                             <div className={`w-5 h-5 rounded-md ${
-                               bg === 'white' ? 'bg-white border border-slate-200' : 
-                               bg === 'black' ? 'bg-slate-900' : 
-                               bg === 'blue' ? 'bg-blue-500' : 'bg-emerald-500'
-                             }`}></div>}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                    
-                    <div className={`aspect-video ${getPreviewBgClass()} rounded-[40px] overflow-hidden flex items-center justify-center border border-slate-100 transition-all duration-700 shadow-inner relative group`}>
-                      {(isProcessing || isUpscaling || isVectorizing) && (
-                        <div className="absolute inset-0 z-20 bg-white/60 backdrop-blur-xl flex flex-col items-center justify-center">
-                          <div className="w-14 h-14 border-[5px] border-red-50 border-t-red-600 rounded-full animate-spin mb-6"></div>
-                          <span className="font-black text-slate-900 tracking-tighter text-lg">AI 연산 처리 중...</span>
-                        </div>
-                      )}
-                      
-                      {upscaledImage ? (
-                        <img src={upscaledImage} alt="Upscaled Result" className="max-h-[80%] max-w-[80%] object-contain drop-shadow-2xl transition-transform duration-700 group-hover:scale-105" />
-                      ) : processedImage && (
-                        <img src={processedImage} alt="Processed Result" className="max-h-[80%] max-w-[80%] object-contain drop-shadow-xl transition-transform duration-700 group-hover:scale-105" />
-                      )}
-                      
-                      <canvas ref={processedCanvasRef} className="hidden" />
-                      <canvas ref={upscaleCanvasRef} className="hidden" />
-                    </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-                  <button onClick={() => setImage(null)} className="px-6 py-5 bg-slate-50 hover:bg-slate-200 text-slate-600 rounded-[24px] font-black transition-all flex items-center justify-center gap-3 border border-slate-100 shadow-sm"><i className="fa-solid fa-arrow-left"></i> 처음으로</button>
-                  <button onClick={() => handleUpscale(2)} disabled={!processedImage || isUpscaling} className="py-5 bg-sky-50 text-sky-700 rounded-[24px] font-black hover:bg-sky-100 transition-all flex items-center justify-center gap-3 disabled:opacity-50"><i className="fa-solid fa-expand"></i> 화질 개선</button>
-                  <button onClick={handleDownloadPng} disabled={!processedImage} className="py-5 bg-red-600 hover:bg-red-700 text-white rounded-[24px] font-black transition-all shadow-xl shadow-red-200 flex items-center justify-center gap-3 disabled:opacity-50"><i className="fa-solid fa-file-export"></i> PNG 저장</button>
-                  <button onClick={handleDownloadVector} disabled={!processedImage || isVectorizing} className="py-5 bg-slate-900 hover:bg-black text-white rounded-[24px] font-black transition-all shadow-xl shadow-slate-300 flex items-center justify-center gap-3 disabled:opacity-50"><i className="fa-solid fa-bezier-curve"></i> SVG 벡터</button>
-                </div>
-              </div>
-            )}
-          </div>
         </div>
 
-        {/* 정보성 콘텐츠 섹션 - AdSense 승인 핵심 영역 */}
+        {/* 정보성 콘텐츠 섹션 */}
         <div className="max-w-4xl mx-auto mt-32 space-y-32">
           
           {/* 가이드 섹션 */}
