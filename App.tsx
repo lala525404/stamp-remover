@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { ProcessingSettings } from './types';
 import { processSealImage, upscaleAndSharpen, traceToSvg } from './utils/imageProcessor';
-import { analyzeSealImage } from './services/geminiService';
 
 const DEFAULT_SETTINGS: ProcessingSettings = {
   redSensitivity: 50,
@@ -29,8 +28,6 @@ const App: React.FC = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isUpscaling, setIsUpscaling] = useState(false);
   const [isVectorizing, setIsVectorizing] = useState(false);
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [analysis, setAnalysis] = useState<string | null>(null);
   const [settings, setSettings] = useState<ProcessingSettings>(DEFAULT_SETTINGS);
   const [currentScale, setCurrentScale] = useState(1);
   const [previewBg, setPreviewBg] = useState<PreviewBg>('checkerboard');
@@ -58,7 +55,6 @@ const App: React.FC = () => {
       const reader = new FileReader();
       reader.onload = (event) => {
         setImage(event.target?.result as string);
-        setAnalysis(null);
         setProcessedImage(null);
         setUpscaledImage(null);
         setCurrentScale(1);
@@ -142,19 +138,6 @@ const App: React.FC = () => {
     }, 100);
   };
 
-  const handleAIAnalysis = async () => {
-    if (!image) return;
-    setIsAnalyzing(true);
-    try {
-      const result = await analyzeSealImage(image);
-      setAnalysis(result);
-    } catch (err) {
-      setAnalysis("분석을 일시적으로 수행할 수 없습니다.");
-    } finally {
-      setIsAnalyzing(false);
-    }
-  };
-
   return (
     <div className="hero-gradient">
       {/* GNB */}
@@ -207,7 +190,6 @@ const App: React.FC = () => {
         </header>
 
         {/* 메인 툴 영역 - 모바일 레이아웃 개선 적용 */}
-        {/* PC에서는 좌우(이미지 왼쪽, 설정 오른쪽), 모바일에서는 상하(이미지 위, 설정 아래) 구조로 변경 */}
         <div id="tool" className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* 1. 이미지 영역 (모바일: 최상단 고정 / PC: 왼쪽 배치) */}
@@ -376,31 +358,6 @@ const App: React.FC = () => {
                   </div>
                 </div>
               </div>
-            </section>
-
-            <section className="bg-slate-900 p-6 lg:p-8 rounded-[32px] text-white overflow-hidden relative group">
-              <div className="absolute -top-10 -right-10 w-40 h-40 bg-red-600/20 blur-[80px] rounded-full group-hover:bg-red-600/40 transition-all duration-700"></div>
-              <h3 className="text-sm font-bold uppercase tracking-widest mb-6 flex items-center gap-2">
-                <i className="fa-solid fa-sparkles text-red-500"></i>
-                AI 추출 컨설팅
-              </h3>
-              {analysis ? (
-                <div className="text-xs leading-relaxed text-slate-300 mb-6 bg-white/5 p-5 rounded-2xl border border-white/10 italic font-light">
-                  "{analysis}"
-                </div>
-              ) : (
-                <p className="text-xs text-slate-400 mb-8 leading-relaxed">
-                  이미지를 업로드하면 AI가 인감의 선명도와 배경 노이즈를 분석하여 맞춤형 설정값을 제안합니다.
-                </p>
-              )}
-              <button 
-                onClick={handleAIAnalysis}
-                disabled={!image || isAnalyzing}
-                className="w-full py-4 bg-red-600 hover:bg-red-700 text-white rounded-2xl font-black transition-all disabled:opacity-30 flex items-center justify-center gap-3 shadow-xl shadow-red-900/40"
-              >
-                {isAnalyzing ? <i className="fa-solid fa-circle-notch animate-spin"></i> : <i className="fa-solid fa-microchip"></i>}
-                {analysis ? "재분석 요청" : "도장 분석 시작"}
-              </button>
             </section>
           </div>
 
