@@ -150,9 +150,8 @@ const App: React.FC = () => {
           </div>
           <div className="hidden md:flex gap-8 text-sm font-semibold text-slate-500">
             <a href="#tool" className="hover:text-red-600 transition-colors">누끼 따기</a>
-            <a href="#usecases" className="hover:text-red-600 transition-colors">활용 사례</a>
-            <a href="#guide" className="hover:text-red-600 transition-colors">촬영 팁</a>
-            <a href="#legal" className="hover:text-red-600 transition-colors">법적 효력</a>
+            <a href="#guide" className="hover:text-red-600 transition-colors">3단계 가이드</a>
+            <a href="#info" className="hover:text-red-600 transition-colors">활용 정보</a>
           </div>
           <button onClick={() => document.getElementById('tool')?.scrollIntoView()} className="bg-slate-900 text-white px-5 py-2 rounded-full text-xs font-bold hover:bg-red-600 transition-all shadow-lg shadow-slate-200">
             시작하기
@@ -353,31 +352,68 @@ const App: React.FC = () => {
           </div>
         </div>
 
-        {/* 🚨 AdSense 승인을 위한 대규모 콘텐츠 보강 구역 */}
+        {/* 콘텐츠 보강 구역 - 이미지 추가됨 */}
         <div id="info" className="max-w-4xl mx-auto mt-40 space-y-40">
             
-            {/* 1. 활용 사례 (Use Cases) */}
-            <section id="usecases">
+            {/* 1. 3단계 가이드 (이미지 추가) */}
+            <section id="guide">
+                <div className="text-center mb-16">
+                    <span className="text-red-600 font-bold text-sm tracking-widest uppercase mb-3 block">How to use</span>
+                    <h2 className="text-3xl md:text-4xl font-black text-slate-900 leading-tight">3단계로 끝내는<br className="md:hidden"/> 초간단 사용법</h2>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+                    {/* Step 1 */}
+                    <div className="bg-white rounded-[40px] p-6 border border-slate-100 shadow-xl shadow-slate-100/50 hover:-translate-y-2 transition-transform duration-300">
+                        <div className="relative aspect-[4/3] mb-6 rounded-3xl overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1616588589676-62b3bd4ff6d2?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dGFrZSUyMHBob3RvJTIwc21hcnRwaG9uZXxlbnwwfHwwfHx8MA%3D%3D" alt="스마트폰으로 도장 촬영" className="absolute inset-0 w-full h-full object-cover" />
+                            <div className="absolute top-4 left-4 w-12 h-12 bg-red-600 text-white rounded-2xl flex items-center justify-center text-xl font-black shadow-lg">1</div>
+                        </div>
+                        <h3 className="font-bold text-xl mb-3 text-slate-900">촬영하기</h3>
+                        <p className="text-slate-500 text-sm leading-relaxed">흰 종이에 찍힌 도장을 스마트폰 카메라로 찍으세요. 밝은 곳일수록 좋습니다.</p>
+                    </div>
+                    {/* Step 2 */}
+                    <div className="bg-white rounded-[40px] p-6 border border-slate-100 shadow-xl shadow-slate-100/50 hover:-translate-y-2 transition-transform duration-300">
+                        <div className="relative aspect-[4/3] mb-6 rounded-3xl overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8dXBsb2FkJTIwaWNvbnxlbnwwfHwwfHx8MA%3D%3D" alt="이미지 업로드 및 설정" className="absolute inset-0 w-full h-full object-cover" />
+                            <div className="absolute top-4 left-4 w-12 h-12 bg-red-600 text-white rounded-2xl flex items-center justify-center text-xl font-black shadow-lg">2</div>
+                        </div>
+                        <h3 className="font-bold text-xl mb-3 text-slate-900">업로드 및 자동 제거</h3>
+                        <p className="text-slate-500 text-sm leading-relaxed">사진을 올리면 AI가 1초 만에 배경을 지워줍니다. 설정 바로 색상도 보정하세요.</p>
+                    </div>
+                    {/* Step 3 */}
+                    <div className="bg-white rounded-[40px] p-6 border border-slate-100 shadow-xl shadow-slate-100/50 hover:-translate-y-2 transition-transform duration-300">
+                        <div className="relative aspect-[4/3] mb-6 rounded-3xl overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1618044733300-9472054094ee?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Y29udHJhY3R8ZW58MHx8MHx8fDA%3D" alt="계약서에 적용 완료" className="absolute inset-0 w-full h-full object-cover" />
+                            <div className="absolute top-4 left-4 w-12 h-12 bg-red-600 text-white rounded-2xl flex items-center justify-center text-xl font-black shadow-lg">3</div>
+                        </div>
+                        <h3 className="font-bold text-xl mb-3 text-slate-900">저장 후 사용</h3>
+                        <p className="text-slate-500 text-sm leading-relaxed">완성된 투명 PNG를 다운로드하여 계약서나 문서에 바로 삽입하세요.</p>
+                    </div>
+                </div>
+            </section>
+
+            {/* 2. 활용 사례 (Use Cases) */}
+            <section id="usecases" className="bg-slate-50 rounded-[56px] p-10 md:p-20">
                 <div className="text-center mb-16">
                     <span className="text-red-600 font-bold text-sm tracking-widest uppercase mb-3 block">Utilization</span>
                     <h2 className="text-3xl md:text-4xl font-black text-slate-900 leading-tight">투명 도장, <br className="md:hidden"/>어디에 사용하나요?</h2>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="bg-slate-50 p-8 rounded-[40px] hover:bg-white hover:shadow-xl transition-all duration-500 border border-slate-100 group">
-                        <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-2xl text-blue-600 shadow-sm mb-6 group-hover:scale-110 transition-transform">
-                            <i className="fa-solid fa-file-contract"></i>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div className="bg-white p-10 rounded-[40px] shadow-sm border border-slate-100 group flex flex-col items-start">
+                        <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center text-3xl text-blue-600 shadow-sm mb-8 group-hover:scale-110 transition-transform">
+                            <i className="fa-solid fa-file-signature"></i>
                         </div>
-                        <h3 className="font-bold text-xl mb-4 text-slate-800">전자 계약 및 견적서</h3>
-                        <p className="text-slate-500 leading-relaxed text-sm">
+                        <h3 className="font-bold text-2xl mb-4 text-slate-900">전자 계약 & 견적서</h3>
+                        <p className="text-slate-600 leading-loose">
                             모두싸인, 싸인이큐 등 전자계약 플랫폼에 업로드하거나, 엑셀/워드로 작성된 견적서 및 거래명세서에 도장 이미지를 삽입하여 신뢰도를 높일 수 있습니다. 배경이 투명하여 글자를 가리지 않습니다.
                         </p>
                     </div>
-                    <div className="bg-slate-50 p-8 rounded-[40px] hover:bg-white hover:shadow-xl transition-all duration-500 border border-slate-100 group">
-                        <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-2xl text-purple-600 shadow-sm mb-6 group-hover:scale-110 transition-transform">
-                            <i className="fa-solid fa-id-card"></i>
+                    <div className="bg-white p-10 rounded-[40px] shadow-sm border border-slate-100 group flex flex-col items-start">
+                        <div className="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center text-3xl text-purple-600 shadow-sm mb-8 group-hover:scale-110 transition-transform">
+                            <i className="fa-solid fa-briefcase"></i>
                         </div>
-                        <h3 className="font-bold text-xl mb-4 text-slate-800">이력서 및 포트폴리오</h3>
-                        <p className="text-slate-500 leading-relaxed text-sm">
+                        <h3 className="font-bold text-2xl mb-4 text-slate-900">이력서 & 포트폴리오</h3>
+                        <p className="text-slate-600 leading-loose">
                             취업용 이력서나 디자인 포트폴리오에 본인의 서명이나 도장을 깔끔하게 넣어 프로페셔널함을 강조하세요. 
                             PNG 형식은 파워포인트, 포토샵, 일러스트레이터 등 모든 툴과 호환됩니다.
                         </p>
@@ -385,112 +421,83 @@ const App: React.FC = () => {
                 </div>
             </section>
 
-            {/* 2. 촬영 팁 (Guide) */}
-            <section id="guide" className="bg-slate-900 rounded-[56px] p-10 md:p-20 text-white relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-96 h-96 bg-red-600/20 blur-[120px] rounded-full pointer-events-none"></div>
-                <div className="relative z-10">
-                    <h2 className="text-3xl font-black mb-12 flex items-center gap-4">
-                        <i className="fa-solid fa-camera text-red-500"></i>
-                        실패 없는 촬영 노하우
-                    </h2>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-                        <div className="space-y-4">
-                            <h4 className="font-bold text-lg text-red-400">01. 흰색 배경 필수</h4>
-                            <p className="text-slate-300 text-sm leading-loose">
-                                반드시 깨끗한 <strong>A4 용지</strong> 위에 도장을 찍어주세요. 유색 종이나 무늬가 있는 바닥에서는 AI가 인주 색상을 정확히 분리하기 어렵습니다.
-                            </p>
-                        </div>
-                        <div className="space-y-4">
-                            <h4 className="font-bold text-lg text-red-400">02. 그림자 주의</h4>
-                            <p className="text-slate-300 text-sm leading-loose">
-                                스마트폰 그림자가 도장을 가리지 않도록 <strong>약간 멀리서 줌(Zoom)을 당겨서</strong> 촬영하는 것이 좋습니다. 형광등 바로 아래는 피해주세요.
-                            </p>
-                        </div>
-                        <div className="space-y-4">
-                            <h4 className="font-bold text-lg text-red-400">03. 수직 촬영</h4>
-                            <p className="text-slate-300 text-sm leading-loose">
-                                도장이 찌그러지지 않도록 <strong>카메라를 종이와 평행하게</strong> 두고 찍으세요. 기울어진 도장은 문서에 넣었을 때 어색해 보일 수 있습니다.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
             {/* 3. 심층 정보 (SEO + Legal) */}
-            <article id="legal" className="space-y-16">
-                <div className="border-l-4 border-slate-900 pl-8">
-                    <h2 className="text-3xl font-black text-slate-900 mb-6">전자 도장의 법적 효력,<br/>확실히 알아두세요.</h2>
-                    <p className="text-slate-600 text-lg leading-relaxed">
+            <article id="legal" className="space-y-20">
+                <div className="max-w-3xl mx-auto text-center">
+                    <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-8 leading-tight">전자 도장의 법적 효력,<br/>확실히 알아두세요.</h2>
+                    <p className="text-slate-600 text-xl leading-relaxed">
                         많은 분들이 "이미지 도장이 법적 효력이 있을까?" 궁금해하십니다.<br/>
-                        결론부터 말씀드리면, <strong>"당사자의 서명 의사가 확실하다면 효력이 있다"</strong>입니다.
+                        핵심은 <strong>"당사자의 서명 의사가 확실하다면 효력이 있다"</strong>입니다.
                     </p>
                 </div>
                 
-                <div className="prose prose-lg text-slate-500 leading-loose">
+                <div className="prose prose-lg max-w-4xl mx-auto text-slate-500 leading-loose bg-white p-10 md:p-16 rounded-[40px] border border-slate-100 shadow-sm">
                     <p>
                         대한민국 <strong>전자서명법 제3조</strong>에 따르면, 전자문서에 포함된 전자서명은 단지 전자적 형태라는 이유만으로 법적 효력이 부인되지 않습니다. 
                         즉, 계약 당사자가 서로 합의하고 이메일이나 카카오톡 등을 통해 도장 이미지가 포함된 계약서를 주고받았다면, 이는 민사소송법상 <strong>처분문서의 진정성립</strong>을 인정받을 수 있는 강력한 증거가 됩니다.
                     </p>
                     <p className="mt-8">
-                        하지만 주의할 점도 있습니다. 
-                        <ul className="list-disc pl-5 space-y-2 mt-4 bg-slate-50 p-6 rounded-2xl text-sm">
-                            <li><strong>인감증명서 필수 계약:</strong> 부동산 매매, 법인 설립, 대출 실행 등 관공서나 금융권에 '인감증명서' 원본을 제출해야 하는 경우에는 이미지 도장을 사용할 수 없습니다.</li>
-                            <li><strong>위변조 분쟁 가능성:</strong> 단순 이미지는 복사가 쉽기 때문에, 중요한 계약에서는 '모두싸인'이나 'Adobe Sign'과 같은 전자서명 전문 솔루션을 통해 타임스탬프와 본인인증 과정을 거치는 것이 안전합니다.</li>
+                        하지만 다음의 경우에는 주의가 필요합니다.
+                        <ul className="list-disc pl-5 space-y-4 mt-6">
+                            <li className="pl-2"><span className="font-bold text-slate-800">인감증명서 필수 계약:</span> 부동산 매매, 법인 설립, 대출 실행 등 관공서나 금융권에 '인감증명서' 원본을 제출해야 하는 경우에는 이미지 도장을 사용할 수 없습니다.</li>
+                            <li className="pl-2"><span className="font-bold text-slate-800">위변조 분쟁 가능성:</span> 단순 이미지는 복사가 쉽기 때문에, 중요한 계약에서는 전자서명 전문 솔루션(타임스탬프, 본인인증 포함)을 이용하는 것이 안전합니다.</li>
                         </ul>
                     </p>
                 </div>
 
-                <div className="bg-slate-50 rounded-[40px] p-10 md:p-14 border border-slate-100">
-                    <h3 className="text-2xl font-bold text-slate-900 mb-8">왜 Seal AI Pro인가요?</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                        <div>
-                            <h4 className="font-bold text-slate-800 mb-2 flex items-center gap-2">
-                                <i className="fa-solid fa-shield-halved text-green-500"></i>
-                                완벽한 보안 (Client-Side)
-                            </h4>
-                            <p className="text-sm text-slate-500">
-                                대부분의 무료 사이트는 이미지를 서버로 전송하여 처리합니다. 이는 개인정보 유출 위험이 있습니다. 
-                                반면 Seal AI Pro는 <strong>사용자의 브라우저(Chrome, Safari) 내부에서만 연산</strong>하므로, 도장 이미지가 인터넷을 통해 어디로도 전송되지 않습니다.
-                            </p>
-                        </div>
-                        <div>
-                            <h4 className="font-bold text-slate-800 mb-2 flex items-center gap-2">
-                                <i className="fa-solid fa-bezier-curve text-blue-500"></i>
-                                무한 확대 SVG 기술
-                            </h4>
-                            <p className="text-sm text-slate-500">
-                                단순 픽셀 제거를 넘어, 도장의 외곽선을 수학적으로 계산하여 <strong>벡터(Vector) 파일로 변환</strong>해줍니다. 
-                                이를 통해 대형 현수막에 인쇄해도 깨지지 않는 선명함을 유지할 수 있습니다.
-                            </p>
-                        </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div className="bg-slate-900 rounded-[40px] p-10 md:p-14 text-white relative overflow-hidden group">
+                        <div className="absolute -top-20 -right-20 w-64 h-64 bg-red-600/30 blur-[100px] rounded-full group-hover:bg-red-600/50 transition-all duration-700"></div>
+                        <h4 className="font-bold text-2xl mb-6 flex items-center gap-3 relative z-10">
+                            <i className="fa-solid fa-shield-halved text-green-500"></i>
+                            완벽한 보안 (Client-Side)
+                        </h4>
+                        <p className="text-slate-300 leading-loose relative z-10">
+                            대부분의 무료 사이트는 이미지를 서버로 전송하여 처리하므로 유출 위험이 있습니다. 
+                            반면, Seal AI는 <strong>사용자의 브라우저 내부에서만 연산</strong>하므로, 도장 이미지가 인터넷을 통해 절대 외부로 전송되지 않습니다.
+                        </p>
+                    </div>
+                    <div className="bg-white rounded-[40px] p-10 md:p-14 border border-slate-100 shadow-sm relative overflow-hidden group">
+                         <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-blue-600/10 blur-[100px] rounded-full group-hover:bg-blue-600/20 transition-all duration-700"></div>
+                        <h4 className="font-bold text-2xl mb-6 flex items-center gap-3 text-slate-900 relative z-10">
+                            <i className="fa-solid fa-bezier-curve text-blue-500"></i>
+                            무한 확대 SVG 기술
+                        </h4>
+                        <p className="text-slate-600 leading-loose relative z-10">
+                            단순 픽셀 제거를 넘어, 도장의 외곽선을 수학적으로 계산하여 <strong>벡터(Vector) 파일로 변환</strong>해줍니다. 
+                            대형 현수막이나 간판에 인쇄해도 깨지지 않는 선명함을 경험하세요.
+                        </p>
                     </div>
                 </div>
             </article>
 
             {/* 4. FAQ */}
-            <section className="space-y-8 pb-20 border-b border-slate-100">
-                <h2 className="text-2xl font-bold text-center">자주 묻는 질문</h2>
-                <div className="space-y-4">
-                    <details className="bg-white rounded-2xl border border-slate-100 p-6 cursor-pointer group hover:border-red-100 transition-colors">
-                        <summary className="font-bold flex justify-between items-center list-none text-slate-800">
+            <section className="space-y-12 pb-20 border-b border-slate-100">
+                <div className="text-center">
+                     <span className="text-red-600 font-bold text-sm tracking-widest uppercase mb-3 block">Q&A</span>
+                    <h2 className="text-3xl font-black text-slate-900">자주 묻는 질문</h2>
+                </div>
+                <div className="space-y-4 max-w-3xl mx-auto">
+                    <details className="bg-white rounded-2xl border border-slate-100 p-6 cursor-pointer group hover:border-red-200 transition-colors shadow-sm">
+                        <summary className="font-bold flex justify-between items-center list-none text-slate-900 text-lg">
                             <span>Q. 한글 파일(HWP)에도 넣을 수 있나요?</span>
                             <span className="text-slate-300 group-open:rotate-180 transition-transform"><i className="fa-solid fa-chevron-down"></i></span>
                         </summary>
-                        <p className="mt-4 text-slate-500 text-sm leading-loose bg-slate-50 p-4 rounded-xl">네, 가능합니다. 한글 프로그램에서 [입력] -> [그림]을 통해 다운로드한 PNG 파일을 넣으신 후, 그림 속성에서 **'글 뒤로'** 배치를 선택하시면 글자 위에 자연스럽게 겹쳐집니다.</p>
+                        <p className="mt-6 text-slate-600 leading-loose pl-4 border-l-2 border-red-100">네, 가능합니다. 한글 프로그램에서 [입력] -> [그림]을 통해 다운로드한 PNG 파일을 넣으신 후, 그림 속성에서 <strong>'글 뒤로'</strong> 배치를 선택하시면 글자 위에 자연스럽게 겹쳐집니다.</p>
                     </details>
-                    <details className="bg-white rounded-2xl border border-slate-100 p-6 cursor-pointer group hover:border-red-100 transition-colors">
-                        <summary className="font-bold flex justify-between items-center list-none text-slate-800">
+                    <details className="bg-white rounded-2xl border border-slate-100 p-6 cursor-pointer group hover:border-red-200 transition-colors shadow-sm">
+                        <summary className="font-bold flex justify-between items-center list-none text-slate-900 text-lg">
                             <span>Q. 도장 색깔을 바꿀 수 있나요?</span>
                             <span className="text-slate-300 group-open:rotate-180 transition-transform"><i className="fa-solid fa-chevron-down"></i></span>
                         </summary>
-                        <p className="mt-4 text-slate-500 text-sm leading-loose bg-slate-50 p-4 rounded-xl">물론입니다. 상단 설정 메뉴의 **'전문적인 리컬러'** 기능을 사용해보세요. 흐릿하게 찍힌 도장도 선명한 '인주색(Standard Red)'이나 '검정색'으로 즉시 변경할 수 있습니다.</p>
+                        <p className="mt-6 text-slate-600 leading-loose pl-4 border-l-2 border-red-100">물론입니다. 상단 설정 메뉴의 <strong>'전문적인 리컬러'</strong> 기능을 사용해보세요. 흐릿하게 찍힌 도장도 선명한 '인주색(Standard Red)'이나 '검정색'으로 즉시 변경할 수 있습니다.</p>
                     </details>
-                    <details className="bg-white rounded-2xl border border-slate-100 p-6 cursor-pointer group hover:border-red-100 transition-colors">
-                        <summary className="font-bold flex justify-between items-center list-none text-slate-800">
+                    <details className="bg-white rounded-2xl border border-slate-100 p-6 cursor-pointer group hover:border-red-200 transition-colors shadow-sm">
+                        <summary className="font-bold flex justify-between items-center list-none text-slate-900 text-lg">
                             <span>Q. 아이폰/갤럭시 등 모바일에서도 되나요?</span>
                             <span className="text-slate-300 group-open:rotate-180 transition-transform"><i className="fa-solid fa-chevron-down"></i></span>
                         </summary>
-                        <p className="mt-4 text-slate-500 text-sm leading-loose bg-slate-50 p-4 rounded-xl">네, 완벽하게 지원합니다. 별도의 앱 설치 없이 스마트폰 브라우저(사파리, 크롬)에서 바로 접속하여 카메라로 찍고 저장까지 원스톱으로 가능합니다.</p>
+                        <p className="mt-6 text-slate-600 leading-loose pl-4 border-l-2 border-red-100">네, 완벽하게 지원합니다. 별도의 앱 설치 없이 스마트폰 브라우저(사파리, 크롬)에서 바로 접속하여 카메라로 찍고 저장까지 원스톱으로 가능합니다.</p>
                     </details>
                 </div>
             </section>
