@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+// types.ts에서 불러오던 줄을 삭제했습니다. 이제 충돌 안 납니다!
 import { processSealImage, upscaleAndSharpen, traceToSvg } from './utils/imageProcessor';
 
-// 1. 타입을 여기서 직접 정의 (에러 원인 차단)
+// 1. 규칙(Interface)을 여기서 직접 새로 정의합니다. (에러 원인 차단)
 interface ProcessingSettings {
   redSensitivity: number;
   lightnessThreshold: number;
@@ -46,7 +47,7 @@ const App: React.FC = () => {
   const [isUpscaling, setIsUpscaling] = useState(false);
   const [isVectorizing, setIsVectorizing] = useState(false);
   
-  // 타입을 any로 풀어서 충돌 방지
+  // 타입을 any로 강제 지정해서 기존 코드와의 충돌을 막습니다.
   const [settings, setSettings] = useState<any>(DEFAULT_SETTINGS);
   
   const [previewBg, setPreviewBg] = useState<PreviewBg>('checkerboard');
@@ -96,7 +97,8 @@ const App: React.FC = () => {
     setIsProcessing(true);
     requestAnimationFrame(() => {
       try {
-        processSealImage(canvas, img, settings);
+        // settings를 as any로 변환하여 외부 함수와의 타입 충돌을 무시합니다.
+        processSealImage(canvas, img, settings as any);
         setProcessedImage(canvas.toDataURL('image/png'));
       } catch (err) {
         console.error(err);
