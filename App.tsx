@@ -1,7 +1,25 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+// types.ts 제거하고 내부 로직 사용
 import { processSealImage, upscaleAndSharpen, traceToSvg } from './utils/imageProcessor';
 
-// 1. 다국어 텍스트 팩
+// 1. 규칙(Interface) 직접 정의
+interface ProcessingSettings {
+  redSensitivity: number;
+  lightnessThreshold: number;
+  edgeSoftness: number;
+  chromaThreshold: number;
+  targetColor: string;
+  detectionMode: 'red' | 'black' | 'mixed';
+}
+
+// 2. 이미지 주소 상수
+const GUIDE_IMAGES = {
+  step1: "https://images.unsplash.com/photo-1616588589676-62b3bd4ff6d2?w=800&q=80",
+  step2: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&q=80",
+  step3: "https://images.unsplash.com/photo-1618044733300-9472054094ee?w=800&q=80"
+};
+
+// 3. 다국어 텍스트 팩
 const TEXT = {
   ko: {
     nav: { tool: "누끼 따기", guide: "가이드", info: "정보", start: "시작하기" },
@@ -97,22 +115,6 @@ const TEXT = {
   }
 };
 
-// 규칙(Interface) 직접 정의
-interface ProcessingSettings {
-  redSensitivity: number;
-  lightnessThreshold: number;
-  edgeSoftness: number;
-  chromaThreshold: number;
-  targetColor: string;
-  detectionMode: 'red' | 'black' | 'mixed';
-}
-
-const GUIDE_IMAGES = {
-  step1: "https://images.unsplash.com/photo-1616588589676-62b3bd4ff6d2?w=800&q=80",
-  step2: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&q=80",
-  step3: "https://images.unsplash.com/photo-1618044733300-9472054094ee?w=800&q=80"
-};
-
 const DEFAULT_SETTINGS: ProcessingSettings = {
   redSensitivity: 50,
   lightnessThreshold: 220,
@@ -186,7 +188,6 @@ const App: React.FC = () => {
   const performProcessing = useCallback(() => {
     const canvas = processedCanvasRef.current;
     const img = imgRef.current;
-    
     if (!canvas || !img) return;
 
     setIsProcessing(true);
@@ -279,13 +280,15 @@ const App: React.FC = () => {
             <a href="#info" className="hover:text-red-600 transition-colors">{t.nav.info}</a>
           </div>
           <div className="flex items-center gap-3">
-            {/* 눈에 잘 띄는 언어 변경 버튼 */}
-            <button 
-              onClick={() => setLang(lang === 'ko' ? 'en' : 'ko')}
-              className="flex items-center gap-2 px-4 py-2 rounded-full border border-slate-200 bg-white hover:bg-slate-50 transition-all shadow-sm text-sm font-bold text-slate-700"
+            {/* 💡 여기가 그 슬라이드 버튼입니다! 확실하게 보이게 만들었습니다. */}
+            <button
+                onClick={() => setLang(lang === 'ko' ? 'en' : 'ko')}
+                className="relative w-14 h-8 bg-slate-200 rounded-full transition-all hover:bg-slate-300 focus:outline-none"
+                title="언어 변경 / Change Language"
             >
-              <span>🌐</span>
-              {lang === 'ko' ? 'English' : '한국어'}
+                <div className={`absolute top-1 left-1 w-6 h-6 bg-white rounded-full shadow-md flex items-center justify-center text-xs transition-all duration-300 transform ${lang === 'en' ? 'translate-x-6' : 'translate-x-0'}`}>
+                    {lang === 'ko' ? '🇰🇷' : '🇺🇸'}
+                </div>
             </button>
             <button onClick={() => document.getElementById('tool')?.scrollIntoView()} className="bg-slate-900 text-white px-5 py-2 rounded-full text-xs font-bold hover:bg-red-600 transition-all shadow-lg shadow-slate-200">
               {t.nav.start}
@@ -295,7 +298,6 @@ const App: React.FC = () => {
       </nav>
 
       <div className="pt-24 pb-20 px-4">
-        {/* 상단 광고 영역 */}
         <div className="ad-container max-w-4xl mx-auto">
           <span className="ad-label">ADVERTISEMENT</span>
           <div className="h-24 flex items-center justify-center text-slate-300 font-bold">Google Ads</div>
