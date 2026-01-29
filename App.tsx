@@ -1,168 +1,103 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { processSealImage, upscaleAndSharpen, traceToSvg } from './utils/imageProcessor';
 
-// 1. 다국어 텍스트 팩 (한국어/영어)
+// 1. 다국어 텍스트 팩
 const TEXT = {
   ko: {
-    nav: {
-      tool: "누끼 따기",
-      guide: "3단계 가이드",
-      info: "활용 정보",
-      start: "시작하기"
-    },
+    nav: { tool: "누끼 따기", guide: "가이드", info: "정보", start: "시작하기" },
     hero: {
       title: <>전문가 수준의 <br className="md:hidden" /><span className="text-red-600 underline decoration-red-100 underline-offset-8">인감 누끼</span>를 <br className="hidden md:block"/>단 3초 만에</>,
       desc: <>복잡한 포토샵 없이 인공지능이 도장만 쏙! <br className="md:hidden"/>전자계약, 공문서, 디자인 프로젝트를 위한 고품질 투명 인감을 만드세요.</>,
-      badge1: "무제한 무료",
-      badge2: "기기 내 로컬 처리",
-      badge3: "SVG 벡터 지원"
+      badge1: "무제한 무료", badge2: "기기 내 로컬 처리", badge3: "SVG 벡터 지원"
     },
-    upload: {
-      title: "인감 이미지 가져오기",
-      desc: <>여기를 클릭하거나 파일을 드래그하여 <br/>도장 이미지를 업로드하세요.</>
-    },
+    upload: { title: "인감 이미지 가져오기", desc: <>여기를 클릭하거나 파일을 드래그하여 <br/>도장 이미지를 업로드하세요.</> },
     settings: {
-      title: "추출 옵션 설정",
-      redMode: "빨간 인감",
-      blackMode: "검정 도장",
-      sensitivity: "추출 민감도",
-      sensitivityDesc: "* 인감이 번졌다면 민감도를 높여보세요.",
-      removeBg: "배경 제거 세기",
-      recolorTitle: "전문적인 리컬러"
+      title: "추출 옵션 설정", redMode: "빨간 인감", blackMode: "검정 도장",
+      sensitivity: "추출 민감도", sensitivityDesc: "* 인감이 번졌다면 민감도를 높여보세요.",
+      removeBg: "배경 제거 세기", recolorTitle: "전문적인 리컬러"
     },
     preview: "미리보기",
-    buttons: {
-      reset: "처음으로",
-      upscale: "화질 개선",
-      savePng: "PNG 저장",
-      saveSvg: "SVG 벡터",
-      processing: "처리 중..."
-    },
+    buttons: { reset: "처음으로", upscale: "화질 개선", savePng: "PNG 저장", saveSvg: "SVG 벡터", processing: "처리 중..." },
     guide: {
       sectionTitle: <>3단계로 끝내는<br className="md:hidden"/> 초간단 사용법</>,
-      step1Title: "촬영하기",
-      step1Desc: "흰 종이에 찍힌 도장을 스마트폰 카메라로 찍으세요. 밝은 곳일수록 좋습니다.",
-      step2Title: "업로드 및 자동 제거",
-      step2Desc: "사진을 올리면 AI가 1초 만에 배경을 지워줍니다. 설정 바로 색상도 보정하세요.",
-      step3Title: "저장 후 사용",
-      step3Desc: "완성된 투명 PNG를 다운로드하여 계약서나 문서에 바로 삽입하세요."
+      step1Title: "촬영하기", step1Desc: "흰 종이에 찍힌 도장을 스마트폰 카메라로 찍으세요. 밝은 곳일수록 좋습니다.",
+      step2Title: "업로드 및 자동 제거", step2Desc: "사진을 올리면 AI가 1초 만에 배경을 지워줍니다. 설정 바로 색상도 보정하세요.",
+      step3Title: "저장 후 사용", step3Desc: "완성된 투명 PNG를 다운로드하여 계약서나 문서에 바로 삽입하세요."
     },
     usecases: {
       sectionTitle: <>투명 도장, <br className="md:hidden"/>어디에 사용하나요?</>,
-      case1Title: "전자 계약 & 견적서",
-      case1Desc: "모두싸인, 싸인이큐 등 전자계약 플랫폼에 업로드하거나, 엑셀/워드로 작성된 견적서 및 거래명세서에 도장 이미지를 삽입하여 신뢰도를 높일 수 있습니다.",
-      case2Title: "이력서 & 포트폴리오",
-      case2Desc: "취업용 이력서나 디자인 포트폴리오에 본인의 서명이나 도장을 깔끔하게 넣어 프로페셔널함을 강조하세요."
+      case1Title: "전자 계약 & 견적서", case1Desc: "모두싸인, 싸인이큐 등 전자계약 플랫폼에 업로드하거나, 엑셀/워드로 작성된 견적서 및 거래명세서에 도장 이미지를 삽입하여 신뢰도를 높일 수 있습니다.",
+      case2Title: "이력서 & 포트폴리오", case2Desc: "취업용 이력서나 디자인 포트폴리오에 본인의 서명이나 도장을 깔끔하게 넣어 프로페셔널함을 강조하세요."
     },
     legal: {
       title: <>전자 도장의 법적 효력,<br/>확실히 알아두세요.</>,
       subtitle: <>핵심은 <strong>"당사자의 서명 의사가 확실하다면 효력이 있다"</strong>입니다.</>,
       desc1: "대한민국 전자서명법 제3조에 따르면, 전자문서에 포함된 전자서명은 단지 전자적 형태라는 이유만으로 법적 효력이 부인되지 않습니다.",
-      warning1: "인감증명서 필수 계약:",
-      warning1Desc: "부동산 매매, 법인 설립 등 관공서나 금융권 제출용 문서는 실물 인감이 필요합니다.",
-      securityTitle: "완벽한 보안 (Client-Side)",
-      securityDesc: "이미지를 서버로 전송하지 않습니다. 브라우저 내부에서만 처리되어 개인정보 유출 걱정이 없습니다.",
-      techTitle: "무한 확대 SVG 기술",
-      techDesc: "단순 픽셀 제거를 넘어 벡터(Vector) 파일로 변환하여, 대형 현수막에 인쇄해도 깨지지 않습니다."
+      warning1: "인감증명서 필수 계약:", warning1Desc: "부동산 매매, 법인 설립 등 관공서나 금융권 제출용 문서는 실물 인감이 필요합니다.",
+      securityTitle: "완벽한 보안 (Client-Side)", securityDesc: "이미지를 서버로 전송하지 않습니다. 브라우저 내부에서만 처리되어 개인정보 유출 걱정이 없습니다.",
+      techTitle: "무한 확대 SVG 기술", techDesc: "단순 픽셀 제거를 넘어 벡터(Vector) 파일로 변환하여, 대형 현수막에 인쇄해도 깨지지 않습니다."
     },
     faq: {
       title: "자주 묻는 질문",
-      q1: "한글 파일(HWP)에도 넣을 수 있나요?",
-      a1: "네, 가능합니다. [입력] -> [그림]으로 이미지를 넣고 속성을 '글 뒤로' 설정하세요.",
-      q2: "도장 색깔을 바꿀 수 있나요?",
-      a2: "물론입니다. '전문적인 리컬러' 기능으로 선명한 빨간색이나 검정색으로 변경 가능합니다.",
-      q3: "스마트폰에서도 되나요?",
-      a3: "네, 별도 앱 설치 없이 아이폰/갤럭시 브라우저에서 바로 사용 가능합니다."
+      q1: "한글 파일(HWP)에도 넣을 수 있나요?", a1: "네, 가능합니다. [입력] -> [그림]으로 이미지를 넣고 속성을 '글 뒤로' 설정하세요.",
+      q2: "도장 색깔을 바꿀 수 있나요?", a2: "물론입니다. '전문적인 리컬러' 기능으로 선명한 빨간색이나 검정색으로 변경 가능합니다.",
+      q3: "스마트폰에서도 되나요?", a3: "네, 별도 앱 설치 없이 아이폰/갤럭시 브라우저에서 바로 사용 가능합니다."
     },
     footer: {
-      privacy: "개인정보처리방침",
-      terms: "이용약관",
-      confirm: "확인했습니다",
+      privacy: "개인정보처리방침", terms: "이용약관", confirm: "확인했습니다",
       modalPrivacy: "데이터 비저장 원칙: 사용자의 이미지는 서버로 전송되지 않으며 브라우저 내에서만 처리됩니다.",
       modalTerms: "서비스 이용 제한: 본 툴을 위조 등 불법적인 목적으로 사용하는 것은 금지됩니다."
     }
   },
   en: {
-    nav: {
-      tool: "Remover",
-      guide: "Guide",
-      info: "Info",
-      start: "Start Now"
-    },
+    nav: { tool: "Remover", guide: "Guide", info: "Info", start: "Start Now" },
     hero: {
       title: <>Remove Backgrounds from <br className="md:hidden" /><span className="text-red-600 underline decoration-red-100 underline-offset-8">Stamps & Seals</span> <br className="hidden md:block"/>in 3 Seconds</>,
       desc: <>No Photoshop needed. AI instantly extracts your stamp! <br className="md:hidden"/>Create transparent seals for e-contracts, documents, and designs.</>,
-      badge1: "100% Free",
-      badge2: "Local Processing",
-      badge3: "SVG Support"
+      badge1: "100% Free", badge2: "Local Processing", badge3: "SVG Support"
     },
-    upload: {
-      title: "Upload Stamp Image",
-      desc: <>Click here or drag & drop <br/>your image file.</>
-    },
+    upload: { title: "Upload Stamp Image", desc: <>Click here or drag & drop <br/>your image file.</> },
     settings: {
-      title: "Extraction Settings",
-      redMode: "Red Ink",
-      blackMode: "Black Ink",
-      sensitivity: "Sensitivity",
-      sensitivityDesc: "* Increase sensitivity if the stamp looks faint.",
-      removeBg: "Clean Background",
-      recolorTitle: "Pro Recolor"
+      title: "Extraction Settings", redMode: "Red Ink", blackMode: "Black Ink",
+      sensitivity: "Sensitivity", sensitivityDesc: "* Increase sensitivity if the stamp looks faint.",
+      removeBg: "Clean Background", recolorTitle: "Pro Recolor"
     },
     preview: "Preview",
-    buttons: {
-      reset: "Reset",
-      upscale: "Upscale",
-      savePng: "Save PNG",
-      saveSvg: "Save SVG",
-      processing: "Processing..."
-    },
+    buttons: { reset: "Reset", upscale: "Upscale", savePng: "Save PNG", saveSvg: "Save SVG", processing: "Processing..." },
     guide: {
       sectionTitle: <>Simple 3-Step<br className="md:hidden"/> Guide</>,
-      step1Title: "Take a Photo",
-      step1Desc: "Take a photo of the stamp on white paper. Bright lighting works best.",
-      step2Title: "Upload & Auto-Remove",
-      step2Desc: "Upload the photo. AI removes the background instantly. You can also adjust colors.",
-      step3Title: "Save & Use",
-      step3Desc: "Download the transparent PNG and insert it into your contracts or documents."
+      step1Title: "Take a Photo", step1Desc: "Take a photo of the stamp on white paper. Bright lighting works best.",
+      step2Title: "Upload & Auto-Remove", step2Desc: "Upload the photo. AI removes the background instantly. You can also adjust colors.",
+      step3Title: "Save & Use", step3Desc: "Download the transparent PNG and insert it into your contracts or documents."
     },
     usecases: {
       sectionTitle: <>Where can I use <br className="md:hidden"/>Transparent Stamps?</>,
-      case1Title: "E-Contracts & Invoices",
-      case1Desc: "Insert your stamp image into Excel, Word, or PDF invoices and e-contract platforms to add professionalism and trust.",
-      case2Title: "Resumes & Portfolios",
-      case2Desc: "Add your digital signature or personal seal to resumes and design portfolios for a polished look."
+      case1Title: "E-Contracts & Invoices", case1Desc: "Insert your stamp image into Excel, Word, or PDF invoices and e-contract platforms to add professionalism and trust.",
+      case2Title: "Resumes & Portfolios", case2Desc: "Add your digital signature or personal seal to resumes and design portfolios for a polished look."
     },
     legal: {
       title: <>Legal Validity of<br/>Digital Stamps</>,
       subtitle: <>The key is <strong>"Intent to Sign"</strong>.</>,
       desc1: "In most countries, electronic signatures and digital stamps are legally valid if the intent of the signer is clear.",
-      warning1: "Important Documents:",
-      warning1Desc: "For real estate deals or government submissions requiring a 'Certificate of Seal', use a physical stamp.",
-      securityTitle: "100% Secure (Client-Side)",
-      securityDesc: "Your images are NEVER sent to a server. All processing happens inside your browser for maximum privacy.",
-      techTitle: "Infinite Zoom SVG",
-      techDesc: "We convert your stamp into a Vector (SVG) file. It stays sharp even when printed on huge banners."
+      warning1: "Important Documents:", warning1Desc: "For real estate deals or government submissions requiring a 'Certificate of Seal', use a physical stamp.",
+      securityTitle: "100% Secure (Client-Side)", securityDesc: "Your images are NEVER sent to a server. All processing happens inside your browser for maximum privacy.",
+      techTitle: "Infinite Zoom SVG", techDesc: "We convert your stamp into a Vector (SVG) file. It stays sharp even when printed on huge banners."
     },
     faq: {
       title: "Frequently Asked Questions",
-      q1: "Can I use this in Word/Docs?",
-      a1: "Yes! Insert the downloaded PNG image and set 'Text Wrap' to 'Behind Text' to make it look natural.",
-      q2: "Can I change the ink color?",
-      a2: "Absolutely. Use the 'Pro Recolor' feature to make faint stamps look like vivid red or professional black.",
-      q3: "Does it work on mobile?",
-      a3: "Yes, it works perfectly on iPhone and Android browsers without installing any app."
+      q1: "Can I use this in Word/Docs?", a1: "Yes! Insert the downloaded PNG image and set 'Text Wrap' to 'Behind Text' to make it look natural.",
+      q2: "Can I change the ink color?", a2: "Absolutely. Use the 'Pro Recolor' feature to make faint stamps look like vivid red or professional black.",
+      q3: "Does it work on mobile?", a3: "Yes, it works perfectly on iPhone and Android browsers without installing any app."
     },
     footer: {
-      privacy: "Privacy Policy",
-      terms: "Terms of Service",
-      confirm: "I Understand",
+      privacy: "Privacy Policy", terms: "Terms of Service", confirm: "I Understand",
       modalPrivacy: "No Server Storage: Your images are processed locally in your browser and are never uploaded to any server.",
       modalTerms: "Usage Policy: Using this tool for forgery or illegal activities is strictly prohibited."
     }
   }
 };
 
+// 규칙(Interface) 직접 정의
 interface ProcessingSettings {
   redSensitivity: number;
   lightnessThreshold: number;
@@ -198,8 +133,8 @@ const PRESET_COLORS = [
 type PreviewBg = 'checkerboard' | 'black' | 'white' | 'blue' | 'green';
 
 const App: React.FC = () => {
-  const [lang, setLang] = useState<'ko' | 'en'>('ko'); // 언어 상태 추가
-  const t = TEXT[lang]; // 현재 언어 텍스트 선택
+  const [lang, setLang] = useState<'ko' | 'en'>('ko');
+  const t = TEXT[lang];
 
   const [image, setImage] = useState<string | null>(null);
   const [processedImage, setProcessedImage] = useState<string | null>(null);
@@ -251,6 +186,7 @@ const App: React.FC = () => {
   const performProcessing = useCallback(() => {
     const canvas = processedCanvasRef.current;
     const img = imgRef.current;
+    
     if (!canvas || !img) return;
 
     setIsProcessing(true);
@@ -342,14 +278,14 @@ const App: React.FC = () => {
             <a href="#guide" className="hover:text-red-600 transition-colors">{t.nav.guide}</a>
             <a href="#info" className="hover:text-red-600 transition-colors">{t.nav.info}</a>
           </div>
-          <div className="flex items-center gap-4">
-            {/* 언어 전환 버튼 */}
+          <div className="flex items-center gap-3">
+            {/* 눈에 잘 띄는 언어 변경 버튼 */}
             <button 
               onClick={() => setLang(lang === 'ko' ? 'en' : 'ko')}
-              className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-lg hover:bg-slate-100 transition-colors"
-              title="Switch Language"
+              className="flex items-center gap-2 px-4 py-2 rounded-full border border-slate-200 bg-white hover:bg-slate-50 transition-all shadow-sm text-sm font-bold text-slate-700"
             >
-              {lang === 'ko' ? '🇺🇸' : '🇰🇷'}
+              <span>🌐</span>
+              {lang === 'ko' ? 'English' : '한국어'}
             </button>
             <button onClick={() => document.getElementById('tool')?.scrollIntoView()} className="bg-slate-900 text-white px-5 py-2 rounded-full text-xs font-bold hover:bg-red-600 transition-all shadow-lg shadow-slate-200">
               {t.nav.start}
@@ -359,6 +295,7 @@ const App: React.FC = () => {
       </nav>
 
       <div className="pt-24 pb-20 px-4">
+        {/* 상단 광고 영역 */}
         <div className="ad-container max-w-4xl mx-auto">
           <span className="ad-label">ADVERTISEMENT</span>
           <div className="h-24 flex items-center justify-center text-slate-300 font-bold">Google Ads</div>
