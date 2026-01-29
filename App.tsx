@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { ProcessingSettings } from './types';
 import { processSealImage, upscaleAndSharpen, traceToSvg } from './utils/imageProcessor';
 
-// 이미지 주소를 상수로 분리하여 관리 (에러 방지)
+// 이미지 주소 상수
 const GUIDE_IMAGES = {
   step1: "https://images.unsplash.com/photo-1616588589676-62b3bd4ff6d2?w=800&q=80",
   step2: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&q=80",
@@ -38,7 +38,9 @@ const App: React.FC = () => {
   const [isUpscaling, setIsUpscaling] = useState(false);
   const [isVectorizing, setIsVectorizing] = useState(false);
   const [settings, setSettings] = useState<ProcessingSettings>(DEFAULT_SETTINGS);
-  const [currentScale, setCurrentScale] = useState(1); // eslint-disable-line @typescript-eslint/no-unused-vars
+  
+  // currentScale 변수 삭제 (에러 원인 제거)
+  
   const [previewBg, setPreviewBg] = useState<PreviewBg>('checkerboard');
   const [showLegal, setShowLegal] = useState<'privacy' | 'terms' | 'about' | null>(null);
   
@@ -66,7 +68,7 @@ const App: React.FC = () => {
         setImage(event.target?.result as string);
         setProcessedImage(null);
         setUpscaledImage(null);
-        setCurrentScale(1);
+        // 이미지가 로드되면 툴 위치로 스크롤
         setTimeout(() => {
             const toolSection = document.getElementById('tool');
             if (toolSection) {
@@ -82,7 +84,7 @@ const App: React.FC = () => {
     const canvas = processedCanvasRef.current;
     const img = imgRef.current;
     
-    // Vercel 배포 시 Strict Null Check 에러 방지
+    // Null 체크 강화
     if (!canvas || !img) return;
 
     setIsProcessing(true);
@@ -110,18 +112,15 @@ const App: React.FC = () => {
   }, [image, performProcessing]);
 
   const handleUpscale = (scale: number) => {
-    // 캔버스 참조를 미리 변수에 할당하여 비동기 처리 시 안전성 확보
     const srcCanvas = processedCanvasRef.current;
     const destCanvas = upscaleCanvasRef.current;
     
     if (!srcCanvas || !destCanvas) return;
 
     setIsUpscaling(true);
-    setCurrentScale(scale);
     
     setTimeout(() => {
       try {
-        // 내부에서 다시 한번 null 체크 (TypeScript 안전 보장)
         if (srcCanvas && destCanvas) {
             upscaleAndSharpen(srcCanvas, destCanvas, scale);
             setUpscaledImage(destCanvas.toDataURL('image/png'));
