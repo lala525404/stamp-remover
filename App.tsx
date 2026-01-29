@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-// types.ts에서 불러오던 줄을 삭제했습니다. 이제 충돌 안 납니다!
+// types.ts 제거하고 내부 로직 사용 (충돌 방지)
 import { processSealImage, upscaleAndSharpen, traceToSvg } from './utils/imageProcessor';
 
-// 1. 규칙(Interface)을 여기서 직접 새로 정의합니다. (에러 원인 차단)
+// 1. 규칙(Interface) 직접 정의
 interface ProcessingSettings {
   redSensitivity: number;
   lightnessThreshold: number;
@@ -12,7 +12,7 @@ interface ProcessingSettings {
   detectionMode: 'red' | 'black' | 'mixed';
 }
 
-// 2. 이미지 주소
+// 2. 이미지 주소 상수
 const GUIDE_IMAGES = {
   step1: "https://images.unsplash.com/photo-1616588589676-62b3bd4ff6d2?w=800&q=80",
   step2: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&q=80",
@@ -47,7 +47,7 @@ const App: React.FC = () => {
   const [isUpscaling, setIsUpscaling] = useState(false);
   const [isVectorizing, setIsVectorizing] = useState(false);
   
-  // 타입을 any로 강제 지정해서 기존 코드와의 충돌을 막습니다.
+  // any 타입으로 설정하여 타입 충돌 완벽 차단
   const [settings, setSettings] = useState<any>(DEFAULT_SETTINGS);
   
   const [previewBg, setPreviewBg] = useState<PreviewBg>('checkerboard');
@@ -97,8 +97,7 @@ const App: React.FC = () => {
     setIsProcessing(true);
     requestAnimationFrame(() => {
       try {
-        // settings를 as any로 변환하여 외부 함수와의 타입 충돌을 무시합니다.
-        processSealImage(canvas, img, settings as any);
+        processSealImage(canvas, img, settings);
         setProcessedImage(canvas.toDataURL('image/png'));
       } catch (err) {
         console.error(err);
@@ -513,7 +512,7 @@ const App: React.FC = () => {
                             <span>Q. 한글 파일(HWP)에도 넣을 수 있나요?</span>
                             <span className="text-slate-300 group-open:rotate-180 transition-transform"><i className="fa-solid fa-chevron-down"></i></span>
                         </summary>
-                        <p className="mt-6 text-slate-600 leading-loose pl-4 border-l-2 border-red-100">네, 가능합니다. 한글 프로그램에서 [입력] -> [그림]을 통해 다운로드한 PNG 파일을 넣으신 후, 그림 속성에서 <strong>'글 뒤로'</strong> 배치를 선택하시면 글자 위에 자연스럽게 겹쳐집니다.</p>
+                        <p className="mt-6 text-slate-600 leading-loose pl-4 border-l-2 border-red-100">네, 가능합니다. 한글 프로그램에서 [입력] &rarr; [그림]을 통해 다운로드한 PNG 파일을 넣으신 후, 그림 속성에서 <strong>'글 뒤로'</strong> 배치를 선택하시면 글자 위에 자연스럽게 겹쳐집니다.</p>
                     </details>
                     <details className="bg-white rounded-2xl border border-slate-100 p-6 cursor-pointer group hover:border-red-200 transition-colors shadow-sm">
                         <summary className="font-bold flex justify-between items-center list-none text-slate-900 text-lg">
