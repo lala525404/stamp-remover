@@ -2,6 +2,13 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { ProcessingSettings } from './types';
 import { processSealImage, upscaleAndSharpen, traceToSvg } from './utils/imageProcessor';
 
+// 이미지 주소를 상수로 분리하여 관리 (에러 방지)
+const GUIDE_IMAGES = {
+  step1: "https://images.unsplash.com/photo-1616588589676-62b3bd4ff6d2?w=800&q=80",
+  step2: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&q=80",
+  step3: "https://images.unsplash.com/photo-1618044733300-9472054094ee?w=800&q=80"
+};
+
 const DEFAULT_SETTINGS: ProcessingSettings = {
   redSensitivity: 50,
   lightnessThreshold: 220,
@@ -25,11 +32,13 @@ const App: React.FC = () => {
   const [image, setImage] = useState<string | null>(null);
   const [processedImage, setProcessedImage] = useState<string | null>(null);
   const [upscaledImage, setUpscaledImage] = useState<string | null>(null);
+  
+  // 상태 변수들
   const [isProcessing, setIsProcessing] = useState(false);
   const [isUpscaling, setIsUpscaling] = useState(false);
   const [isVectorizing, setIsVectorizing] = useState(false);
   const [settings, setSettings] = useState<ProcessingSettings>(DEFAULT_SETTINGS);
-  const [currentScale, setCurrentScale] = useState(1);
+  const [currentScale, setCurrentScale] = useState(1); // eslint-disable-line @typescript-eslint/no-unused-vars
   const [previewBg, setPreviewBg] = useState<PreviewBg>('checkerboard');
   const [showLegal, setShowLegal] = useState<'privacy' | 'terms' | 'about' | null>(null);
   
@@ -59,7 +68,10 @@ const App: React.FC = () => {
         setUpscaledImage(null);
         setCurrentScale(1);
         setTimeout(() => {
-            document.getElementById('tool')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            const toolSection = document.getElementById('tool');
+            if (toolSection) {
+                toolSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
         }, 100);
       };
       reader.readAsDataURL(file);
@@ -67,12 +79,17 @@ const App: React.FC = () => {
   };
 
   const performProcessing = useCallback(() => {
-    if (!imgRef.current || !processedCanvasRef.current) return;
+    const canvas = processedCanvasRef.current;
+    const img = imgRef.current;
+    
+    // Vercel 배포 시 Strict Null Check 에러 방지
+    if (!canvas || !img) return;
+
     setIsProcessing(true);
     requestAnimationFrame(() => {
       try {
-        processSealImage(processedCanvasRef.current!, imgRef.current!, settings);
-        setProcessedImage(processedCanvasRef.current!.toDataURL('image/png'));
+        processSealImage(canvas, img, settings);
+        setProcessedImage(canvas.toDataURL('image/png'));
       } catch (err) {
         console.error(err);
       } finally {
@@ -93,13 +110,22 @@ const App: React.FC = () => {
   }, [image, performProcessing]);
 
   const handleUpscale = (scale: number) => {
-    if (!processedCanvasRef.current || !upscaleCanvasRef.current) return;
+    // 캔버스 참조를 미리 변수에 할당하여 비동기 처리 시 안전성 확보
+    const srcCanvas = processedCanvasRef.current;
+    const destCanvas = upscaleCanvasRef.current;
+    
+    if (!srcCanvas || !destCanvas) return;
+
     setIsUpscaling(true);
     setCurrentScale(scale);
+    
     setTimeout(() => {
       try {
-        upscaleAndSharpen(processedCanvasRef.current!, upscaleCanvasRef.current!, scale);
-        setUpscaledImage(upscaleCanvasRef.current!.toDataURL('image/png'));
+        // 내부에서 다시 한번 null 체크 (TypeScript 안전 보장)
+        if (srcCanvas && destCanvas) {
+            upscaleAndSharpen(srcCanvas, destCanvas, scale);
+            setUpscaledImage(destCanvas.toDataURL('image/png'));
+        }
       } finally {
         setIsUpscaling(false);
       }
@@ -365,7 +391,7 @@ const App: React.FC = () => {
                     {/* Step 1 */}
                     <div className="bg-white rounded-[40px] p-6 border border-slate-100 shadow-xl shadow-slate-100/50 hover:-translate-y-2 transition-transform duration-300">
                         <div className="relative aspect-[4/3] mb-6 rounded-3xl overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1616588589676-62b3bd4ff6d2?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dGFrZSUyMHBob3RvJTIwc21hcnRwaG9uZXxlbnwwfHwwfHx8MA%3D%3D" alt="스마트폰으로 도장 촬영" className="absolute inset-0 w-full h-full object-cover" />
+                            <img src={GUIDE_IMAGES.step1} alt="스마트폰으로 도장 촬영" className="absolute inset-0 w-full h-full object-cover" />
                             <div className="absolute top-4 left-4 w-12 h-12 bg-red-600 text-white rounded-2xl flex items-center justify-center text-xl font-black shadow-lg">1</div>
                         </div>
                         <h3 className="font-bold text-xl mb-3 text-slate-900">촬영하기</h3>
@@ -374,7 +400,7 @@ const App: React.FC = () => {
                     {/* Step 2 */}
                     <div className="bg-white rounded-[40px] p-6 border border-slate-100 shadow-xl shadow-slate-100/50 hover:-translate-y-2 transition-transform duration-300">
                         <div className="relative aspect-[4/3] mb-6 rounded-3xl overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8dXBsb2FkJTIwaWNvbnxlbnwwfHwwfHx8MA%3D%3D" alt="이미지 업로드 및 설정" className="absolute inset-0 w-full h-full object-cover" />
+                            <img src={GUIDE_IMAGES.step2} alt="이미지 업로드 및 설정" className="absolute inset-0 w-full h-full object-cover" />
                             <div className="absolute top-4 left-4 w-12 h-12 bg-red-600 text-white rounded-2xl flex items-center justify-center text-xl font-black shadow-lg">2</div>
                         </div>
                         <h3 className="font-bold text-xl mb-3 text-slate-900">업로드 및 자동 제거</h3>
@@ -383,7 +409,7 @@ const App: React.FC = () => {
                     {/* Step 3 */}
                     <div className="bg-white rounded-[40px] p-6 border border-slate-100 shadow-xl shadow-slate-100/50 hover:-translate-y-2 transition-transform duration-300">
                         <div className="relative aspect-[4/3] mb-6 rounded-3xl overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1618044733300-9472054094ee?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Y29udHJhY3R8ZW58MHx8MHx8fDA%3D" alt="계약서에 적용 완료" className="absolute inset-0 w-full h-full object-cover" />
+                            <img src={GUIDE_IMAGES.step3} alt="계약서에 적용 완료" className="absolute inset-0 w-full h-full object-cover" />
                             <div className="absolute top-4 left-4 w-12 h-12 bg-red-600 text-white rounded-2xl flex items-center justify-center text-xl font-black shadow-lg">3</div>
                         </div>
                         <h3 className="font-bold text-xl mb-3 text-slate-900">저장 후 사용</h3>
