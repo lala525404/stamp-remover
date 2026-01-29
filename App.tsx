@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 // types.ts 제거하고 내부 로직 사용
 import { processSealImage, upscaleAndSharpen, traceToSvg } from './utils/imageProcessor';
 
-// ✅ 후원 페이지 주소 (자동 적용됨)
+// ✅ 후원 페이지 주소
 const BMC_LINK = "https://www.buymeacoffee.com/lala525.404";
 
 // 1. 규칙(Interface) 직접 정의
@@ -25,7 +25,8 @@ const GUIDE_IMAGES = {
 // 3. 다국어 텍스트 팩
 const TEXT = {
   ko: {
-    nav: { tool: "누끼 따기", guide: "가이드", info: "정보", start: "시작하기" },
+    // 💡 nav에 donate(후원) 텍스트 추가
+    nav: { tool: "누끼 따기", guide: "가이드", info: "정보", start: "시작하기", donate: "후원하기" },
     hero: {
       title: <>전문가 수준의 <br className="md:hidden" /><span className="text-red-600 underline decoration-red-100 underline-offset-8">인감 누끼</span>를 <br className="hidden md:block"/>단 3초 만에</>,
       desc: <>복잡한 포토샵 없이 인공지능이 도장만 쏙! <br className="md:hidden"/>전자계약, 공문서, 디자인 프로젝트를 위한 고품질 투명 인감을 만드세요.</>,
@@ -72,7 +73,7 @@ const TEXT = {
     }
   },
   en: {
-    nav: { tool: "Remover", guide: "Guide", info: "Info", start: "Start Now" },
+    nav: { tool: "Remover", guide: "Guide", info: "Info", start: "Start Now", donate: "Donate" },
     hero: {
       title: <>Remove Backgrounds from <br className="md:hidden" /><span className="text-red-600 underline decoration-red-100 underline-offset-8">Stamps & Seals</span> <br className="hidden md:block"/>in 3 Seconds</>,
       desc: <>No Photoshop needed. AI instantly extracts your stamp! <br className="md:hidden"/>Create transparent seals for e-contracts, documents, and designs.</>,
@@ -284,18 +285,30 @@ const App: React.FC = () => {
             <a href="#guide" className="hover:text-red-600 transition-colors">{t.nav.guide}</a>
             <a href="#info" className="hover:text-red-600 transition-colors">{t.nav.info}</a>
           </div>
-          <div className="flex items-center gap-3">
-            {/* 💡 슬라이드 버튼 (확실하게 보임) */}
+          <div className="flex items-center gap-2 md:gap-3">
+            {/* 💡 GNB 후원 버튼 (노란색) 추가됨 */}
+            <a 
+               href={BMC_LINK} 
+               target="_blank" 
+               rel="noopener noreferrer" 
+               className="bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-bold px-3 py-1.5 md:py-2 rounded-full flex items-center gap-1 transition-all shadow-md hover:scale-105 text-xs md:text-sm"
+               title={t.nav.donate}
+             >
+                <span>☕️</span>
+                <span className="hidden md:inline">{t.nav.donate}</span>
+            </a>
+
+            {/* 언어 변경 버튼 */}
             <button
                 onClick={() => setLang(lang === 'ko' ? 'en' : 'ko')}
-                className="relative w-14 h-8 bg-slate-200 rounded-full transition-all hover:bg-slate-300 focus:outline-none shadow-inner"
+                className="relative w-12 md:w-14 h-7 md:h-8 bg-slate-200 rounded-full transition-all hover:bg-slate-300 focus:outline-none shadow-inner"
                 title="언어 변경 / Change Language"
             >
-                <div className={`absolute top-1 left-1 w-6 h-6 bg-white rounded-full shadow-md flex items-center justify-center text-xs transition-all duration-300 transform ${lang === 'en' ? 'translate-x-6' : 'translate-x-0'}`}>
+                <div className={`absolute top-1 left-1 w-5 h-5 md:w-6 md:h-6 bg-white rounded-full shadow-md flex items-center justify-center text-[10px] md:text-xs transition-all duration-300 transform ${lang === 'en' ? 'translate-x-5 md:translate-x-6' : 'translate-x-0'}`}>
                     {lang === 'ko' ? '🇰🇷' : '🇺🇸'}
                 </div>
             </button>
-            <button onClick={() => document.getElementById('tool')?.scrollIntoView()} className="bg-slate-900 text-white px-5 py-2 rounded-full text-xs font-bold hover:bg-red-600 transition-all shadow-lg shadow-slate-200">
+            <button onClick={() => document.getElementById('tool')?.scrollIntoView()} className="bg-slate-900 text-white px-4 md:px-5 py-1.5 md:py-2 rounded-full text-xs font-bold hover:bg-red-600 transition-all shadow-lg shadow-slate-200">
               {t.nav.start}
             </button>
           </div>
@@ -627,7 +640,7 @@ const App: React.FC = () => {
           <div className="flex flex-col md:flex-row justify-center gap-6 text-xs text-slate-400 items-center">
              <button onClick={() => setShowLegal('privacy')} className="hover:text-white">{t.footer.privacy}</button>
              <button onClick={() => setShowLegal('terms')} className="hover:text-white">{t.footer.terms}</button>
-             {/* ✅ ☕️ 후원 버튼 추가됨 (노란색으로 강조) */}
+             {/* 하단 후원 버튼도 유지 (사용자 눈에 더 많이 띄게) */}
              <a 
                href={BMC_LINK} 
                target="_blank" 
