@@ -58,7 +58,6 @@ const App: React.FC = () => {
         setProcessedImage(null);
         setUpscaledImage(null);
         setCurrentScale(1);
-        // 이미지가 로드되면 툴 위치로 스크롤
         setTimeout(() => {
             document.getElementById('tool')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }, 100);
@@ -151,9 +150,8 @@ const App: React.FC = () => {
           </div>
           <div className="hidden md:flex gap-8 text-sm font-semibold text-slate-500">
             <a href="#tool" className="hover:text-red-600 transition-colors">누끼 따기</a>
-            <a href="#how-to" className="hover:text-red-600 transition-colors">사용 방법</a>
-            <a href="#knowledge" className="hover:text-red-600 transition-colors">전문 지식</a>
-            <a href="#faq" className="hover:text-red-600 transition-colors">FAQ</a>
+            <a href="#guide" className="hover:text-red-600 transition-colors">이용 가이드</a>
+            <a href="#info" className="hover:text-red-600 transition-colors">디지털 인감이란?</a>
           </div>
           <button onClick={() => document.getElementById('tool')?.scrollIntoView()} className="bg-slate-900 text-white px-5 py-2 rounded-full text-xs font-bold hover:bg-red-600 transition-all shadow-lg shadow-slate-200">
             시작하기
@@ -189,10 +187,10 @@ const App: React.FC = () => {
           </div>
         </header>
 
-        {/* 메인 툴 영역 - 모바일 레이아웃 개선 적용 */}
+        {/* 메인 툴 영역 */}
         <div id="tool" className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
-          {/* 1. 이미지 영역 (모바일: 최상단 고정 / PC: 왼쪽 배치) */}
+          {/* 이미지 영역 (Sticky) */}
           <div className="lg:col-span-8 space-y-8 order-1 lg:order-1">
             {!image ? (
               <div className="aspect-[16/10] bg-white rounded-[48px] border-4 border-dashed border-slate-100 flex flex-col items-center justify-center p-12 transition-all hover:border-red-200 hover:bg-red-50/20 group cursor-pointer relative shadow-inner overflow-hidden">
@@ -209,18 +207,11 @@ const App: React.FC = () => {
                 <p className="text-slate-400 text-center max-w-sm leading-relaxed font-medium">
                   여기를 클릭하거나 파일을 드래그하여 <br/>도장 이미지를 업로드하세요.
                 </p>
-                <div className="mt-12 flex items-center gap-6 opacity-30">
-                  <i className="fa-solid fa-image text-2xl"></i>
-                  <i className="fa-solid fa-file-pdf text-2xl"></i>
-                  <i className="fa-solid fa-file-image text-2xl"></i>
-                </div>
               </div>
             ) : (
               <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-                {/* 모바일 Sticky Header 적용 부분 */}
                 <div className="sticky top-16 z-40 bg-white/80 backdrop-blur-md -mx-4 px-4 py-4 lg:static lg:bg-transparent lg:p-0 lg:mx-0 shadow-sm lg:shadow-none border-b border-slate-200/50 lg:border-none rounded-b-[32px] lg:rounded-none transition-all">
                     <div className="bg-white p-2 lg:p-6 rounded-[32px] lg:rounded-[48px] shadow-xl lg:shadow-2xl shadow-slate-200/50 border border-slate-50 relative">
-                        {/* 프리뷰 컨트롤바 */}
                         <div className="flex justify-between items-center mb-4 px-2">
                         <div className="flex items-center gap-2 lg:gap-3">
                             <div className="w-1.5 h-1.5 lg:w-2 lg:h-2 bg-green-500 rounded-full animate-ping"></div>
@@ -264,7 +255,6 @@ const App: React.FC = () => {
                     </div>
                 </div>
 
-                {/* 하단 버튼 그룹 */}
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 px-2 lg:px-0">
                   <button onClick={() => setImage(null)} className="px-4 py-4 bg-slate-50 hover:bg-slate-200 text-slate-600 rounded-[20px] font-bold text-sm transition-all flex items-center justify-center gap-2 border border-slate-100 shadow-sm"><i className="fa-solid fa-arrow-left"></i> 처음으로</button>
                   <button onClick={() => handleUpscale(2)} disabled={!processedImage || isUpscaling} className="py-4 bg-sky-50 text-sky-700 rounded-[20px] font-bold text-sm hover:bg-sky-100 transition-all flex items-center justify-center gap-2 disabled:opacity-50"><i className="fa-solid fa-expand"></i> 화질 개선</button>
@@ -275,7 +265,7 @@ const App: React.FC = () => {
             )}
           </div>
 
-          {/* 2. 설정 영역 (모바일: 이미지 아래 / PC: 오른쪽 배치) */}
+          {/* 설정 영역 */}
           <div className="lg:col-span-4 space-y-6 order-2 lg:order-2">
             <section className="bg-white p-6 lg:p-8 rounded-[32px] shadow-2xl shadow-slate-200/50 border border-slate-50">
               <h2 className="text-lg lg:text-xl font-bold mb-6 flex items-center gap-3">
@@ -360,164 +350,109 @@ const App: React.FC = () => {
               </div>
             </section>
           </div>
-
         </div>
 
-        {/* 정보성 콘텐츠 섹션 */}
-        <div className="max-w-4xl mx-auto mt-32 space-y-32">
-          
-          {/* 가이드 섹션 */}
-          <section id="how-to" className="text-center">
-            <h2 className="text-3xl font-black mb-16 tracking-tight">고해상도 도장 추출 3단계</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-              <div className="space-y-6 group">
-                <div className="w-20 h-20 bg-slate-50 text-slate-300 rounded-[32px] flex items-center justify-center mx-auto text-3xl font-black group-hover:bg-red-50 group-hover:text-red-600 transition-all duration-500">01</div>
-                <h4 className="font-bold text-xl">깨끗하게 찍기</h4>
-                <p className="text-slate-500 text-sm leading-loose px-4">
-                  흰색 A4 용지에 도장을 흔들림 없이 찍으세요. 조명이 밝은 곳에서 촬영하면 AI 추출이 훨씬 정확해집니다.
-                </p>
-              </div>
-              <div className="space-y-6 group">
-                <div className="w-20 h-20 bg-slate-50 text-slate-300 rounded-[32px] flex items-center justify-center mx-auto text-3xl font-black group-hover:bg-red-50 group-hover:text-red-600 transition-all duration-500">02</div>
-                <h4 className="font-bold text-xl">색상 조절하기</h4>
-                <p className="text-slate-500 text-sm leading-loose px-4">
-                  '민감도' 조절을 통해 번진 잉크까지 정밀하게 선택하세요. '리컬러' 기능을 사용해 선명한 빨간색으로 보정할 수 있습니다.
-                </p>
-              </div>
-              <div className="space-y-6 group">
-                <div className="w-20 h-20 bg-slate-50 text-slate-300 rounded-[32px] flex items-center justify-center mx-auto text-3xl font-black group-hover:bg-red-50 group-hover:text-red-600 transition-all duration-500">03</div>
-                <h4 className="font-bold text-xl">무한 확대 SVG</h4>
-                <p className="text-slate-500 text-sm leading-loose px-4">
-                  웹/앱 개발이나 디자인 작업이 필요하다면 SVG 형식을 선택하세요. 크기를 아무리 키워도 선명함이 유지됩니다.
-                </p>
-              </div>
-            </div>
-          </section>
-
-          {/* 정보성 칼럼 영역 */}
-          <section id="knowledge" className="space-y-20">
-            <div className="ad-container">
-              <span className="ad-label">ADVERTISEMENT</span>
-              <div className="h-40 flex items-center justify-center text-slate-300 font-bold">중간 광고 영역</div>
-            </div>
-
-            <article className="bg-white p-10 md:p-20 rounded-[56px] border border-slate-100 shadow-sm leading-relaxed space-y-12">
-              <div>
-                <h2 className="text-3xl font-black text-slate-900 mb-8 tracking-tight border-b border-red-100 pb-4 inline-block">인감 도장의 디지털화, 왜 필요한가요?</h2>
-                <p className="text-slate-600 mb-6 text-lg font-light leading-loose">
-                  최근 비대면 서비스의 확산으로 <strong>전자 계약</strong>이 기업과 개인의 표준으로 자리 잡았습니다. 단순히 종이에 도장을 찍어 스캔하는 방식은 해상도가 낮고 배경이 지저분해 신뢰도가 떨어질 수 있습니다. 
-                  디지털 인감 누끼 도구는 전문적인 수준의 투명 배경 이미지를 생성하여 문서의 격을 높여줍니다.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                <div className="space-y-4">
-                  <h3 className="text-xl font-bold text-red-600">법적 효력과 디지털 인감</h3>
-                  <p className="text-sm text-slate-500 leading-loose">
-                    국내 전자서명법에 따르면, 전자문서에 사용된 도장 이미지 역시 당사자의 의사가 반영되었다면 법적 효력을 가집니다. 하지만 인감 증명서 제출이 필요한 오프라인 법무 대행의 경우 반드시 원본 문서를 확인해야 하므로 사용처를 구분하는 지혜가 필요합니다.
-                  </p>
+        {/* 🚨 AdSense 승인용 핵심 콘텐츠 섹션 (여기가 승인 치트키입니다) */}
+        <div id="info" className="max-w-4xl mx-auto mt-32 space-y-24">
+            
+            {/* 1. 사용 가이드 */}
+            <section id="guide" className="space-y-12">
+                <div className="text-center space-y-4">
+                    <h2 className="text-3xl font-black text-slate-900 tracking-tight">누구나 쉽게 만드는 디지털 인감</h2>
+                    <p className="text-slate-500">복잡한 디자인 툴 없이 3단계로 끝내는 온라인 도장 만들기</p>
                 </div>
-                <div className="space-y-4">
-                  <h3 className="text-xl font-bold text-red-600">완벽한 추출을 위한 팁</h3>
-                  <p className="text-sm text-slate-500 leading-loose">
-                    도장을 찍을 때 바닥에 고무 패드를 깔아 잉크가 골고루 묻게 하세요. 사진 촬영 시에는 줌(Zoom)을 사용하기보다 카메라를 가까이 대고 초점을 명확히 잡는 것이 좋습니다. 노란 조명보다는 형광등이나 자연광이 AI 분석에 유리합니다.
-                  </p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-lg shadow-slate-100/50">
+                        <div className="w-12 h-12 bg-red-100 text-red-600 rounded-2xl flex items-center justify-center text-xl font-black mb-6">1</div>
+                        <h3 className="font-bold text-lg mb-3">촬영하기</h3>
+                        <p className="text-slate-500 text-sm leading-relaxed">흰 종이에 도장을 찍고 스마트폰으로 촬영하세요. 그림자가 지지 않게 밝은 곳에서 찍으면 더 좋습니다.</p>
+                    </div>
+                    <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-lg shadow-slate-100/50">
+                        <div className="w-12 h-12 bg-red-100 text-red-600 rounded-2xl flex items-center justify-center text-xl font-black mb-6">2</div>
+                        <h3 className="font-bold text-lg mb-3">업로드 및 조정</h3>
+                        <p className="text-slate-500 text-sm leading-relaxed">사진을 업로드하면 AI가 자동으로 배경을 제거합니다. 민감도 슬라이더를 움직여 흐린 부분까지 잡아내세요.</p>
+                    </div>
+                    <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-lg shadow-slate-100/50">
+                        <div className="w-12 h-12 bg-red-100 text-red-600 rounded-2xl flex items-center justify-center text-xl font-black mb-6">3</div>
+                        <h3 className="font-bold text-lg mb-3">저장 및 사용</h3>
+                        <p className="text-slate-500 text-sm leading-relaxed">투명 배경이 적용된 PNG 파일을 다운로드하세요. 한글, 워드, PDF 계약서에 바로 서명으로 넣을 수 있습니다.</p>
+                    </div>
                 </div>
-              </div>
+            </section>
 
-              <div className="bg-slate-50 p-10 rounded-[40px] border border-slate-200/50">
-                <h3 className="text-xl font-bold mb-6 flex items-center gap-3">
-                  <i className="fa-solid fa-lock text-slate-800"></i>
-                  철저한 보안 및 프라이버시 원칙
-                </h3>
-                <p className="text-sm text-slate-500 leading-loose">
-                  인감 도장은 개인과 기업의 권리를 증명하는 매우 중요한 정보입니다. 본 서비스는 **서버 저장형 방식이 아닌, 사용자의 브라우저 내에서만 연산되는 '클라이언트 사이드' 기술**을 사용합니다. 
-                  즉, 귀하의 인감 데이터는 인터넷 어딘가로 전송되거나 서버에 남지 않습니다. 안전하게 안심하고 이용하세요.
-                </p>
-              </div>
+            {/* 2. SEO 정보성 글 (구글이 좋아하는 긴 글) */}
+            <article className="bg-white p-8 md:p-12 rounded-[40px] border border-slate-100 shadow-sm space-y-10">
+                <div className="space-y-4 border-b border-slate-100 pb-8">
+                    <h2 className="text-2xl font-bold text-slate-900">디지털 인감이란 무엇인가요?</h2>
+                    <p className="text-slate-600 leading-loose">
+                        디지털 인감(Digital Seal)은 실제 인감 도장을 스캔하거나 그래픽 소프트웨어로 제작하여 전자 문서에 사용할 수 있도록 만든 이미지 파일입니다. 
+                        재택근무와 비대면 계약이 활성화되면서, 기존의 종이 계약 방식 대신 PDF나 전자 계약 플랫폼을 통한 서명이 표준이 되었습니다. 
+                        이때 배경이 투명하게 처리된 도장 이미지(PNG)가 필수적이며, 이를 통해 문서의 전문성과 신뢰도를 높일 수 있습니다.
+                    </p>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div className="space-y-4">
+                        <h3 className="text-lg font-bold text-slate-800">배경 제거(누끼)가 중요한 이유</h3>
+                        <p className="text-slate-500 text-sm leading-loose">
+                            일반적인 사진(JPG)으로 도장을 찍어 문서에 올리면 흰색 배경이 글자를 가려 조잡해 보입니다. 
+                            본 서비스는 <strong>알파 채널(Alpha Channel)</strong> 기술을 활용하여 붉은 인주 색상만 남기고 나머지를 완벽하게 투명화합니다. 
+                            이를 통해 마치 종이에 직접 찍은 듯한 자연스러운 연출이 가능합니다.
+                        </p>
+                    </div>
+                    <div className="space-y-4">
+                        <h3 className="text-lg font-bold text-slate-800">법적 효력에 대하여</h3>
+                        <p className="text-slate-500 text-sm leading-loose">
+                            전자서명법에 따르면 전자 문서에 포함된 도장 이미지도 당사자의 서명 의도가 명확하다면 법적 효력을 가질 수 있습니다. 
+                            다만, 인감증명서가 필수적인 부동산 거래나 법인 설립 등의 중요 계약에서는 반드시 실물 인감 날인과 증명서 제출이 필요하므로 주의해야 합니다.
+                        </p>
+                    </div>
+                </div>
             </article>
-          </section>
 
-          {/* FAQ 섹션 */}
-          <section id="faq" className="space-y-10">
-            <h2 className="text-3xl font-black text-center tracking-tight">자주 묻는 질문</h2>
-            <div className="space-y-4">
-              {[
-                { q: "누끼 작업이 무료인가요?", a: "네, 인감 누끼 AI Pro는 어떠한 비용도 요구하지 않습니다. 전문적인 고해상도 추출 기능을 무제한으로 사용하실 수 있습니다." },
-                { q: "전자 계약 서비스와 호환되나요?", a: "모두싸인, 싸인이큐, 어도비 사인 등 대부분의 메이저 전자계약 솔루션에서 배경이 없는 PNG 파일을 지원합니다. 본 툴에서 생성된 이미지를 그대로 업로드하여 사용하세요." },
-                { q: "모바일에서도 사용 가능한가요?", a: "반응형 웹 디자인을 지원하므로 스마트폰 카메라로 찍은 직후 모바일 브라우저에서 바로 누끼를 따고 저장할 수 있습니다." },
-                { q: "개인 인감을 위조에 사용할 위험은 없나요?", a: "본 도구는 정당한 권한을 가진 사용자의 편의를 위한 툴입니다. 타인의 인감을 무단 도용하는 행위는 법적 처벌 대상이며, 이에 대한 모든 책임은 사용자에게 있습니다." }
-              ].map((faq, i) => (
-                <details key={i} className="group bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden transition-all duration-300">
-                  <summary className="p-8 font-bold cursor-pointer flex justify-between items-center select-none group-open:bg-slate-50">
-                    <span className="flex gap-4">
-                      <span className="text-red-500 font-black">Q.</span>
-                      {faq.q}
-                    </span>
-                    <i className="fa-solid fa-chevron-down text-slate-300 transition-transform group-open:rotate-180"></i>
-                  </summary>
-                  <div className="px-20 py-10 text-slate-500 text-sm leading-loose border-t border-slate-50 bg-slate-50/30">
-                    <span className="font-bold text-slate-800 block mb-2">A.</span>
-                    {faq.a}
-                  </div>
-                </details>
-              ))}
-            </div>
-          </section>
+            {/* 3. FAQ */}
+            <section className="space-y-8">
+                <h2 className="text-2xl font-bold text-center">자주 묻는 질문</h2>
+                <div className="space-y-4">
+                    <details className="bg-white rounded-2xl border border-slate-100 p-6 cursor-pointer group">
+                        <summary className="font-bold flex justify-between items-center list-none">
+                            <span>Q. 무료로 사용할 수 있나요?</span>
+                            <span className="text-slate-300 group-open:rotate-180 transition-transform"><i className="fa-solid fa-chevron-down"></i></span>
+                        </summary>
+                        <p className="mt-4 text-slate-500 text-sm leading-loose">네, Seal AI의 모든 기능은 회원가입 없이 100% 무료로 제공됩니다. 횟수 제한 없이 마음껏 도장을 만드세요.</p>
+                    </details>
+                    <details className="bg-white rounded-2xl border border-slate-100 p-6 cursor-pointer group">
+                        <summary className="font-bold flex justify-between items-center list-none">
+                            <span>Q. 내 도장 사진이 서버에 저장되나요?</span>
+                            <span className="text-slate-300 group-open:rotate-180 transition-transform"><i className="fa-solid fa-chevron-down"></i></span>
+                        </summary>
+                        <p className="mt-4 text-slate-500 text-sm leading-loose">아니요, 절대 저장되지 않습니다. 본 서비스는 '클라이언트 사이드' 기술을 사용하여 사용자의 브라우저(크롬, 사파리 등) 안에서만 이미지를 처리합니다. 보안 걱정 없이 안전하게 이용하세요.</p>
+                    </details>
+                    <details className="bg-white rounded-2xl border border-slate-100 p-6 cursor-pointer group">
+                        <summary className="font-bold flex justify-between items-center list-none">
+                            <span>Q. SVG 파일은 어디에 쓰나요?</span>
+                            <span className="text-slate-300 group-open:rotate-180 transition-transform"><i className="fa-solid fa-chevron-down"></i></span>
+                        </summary>
+                        <p className="mt-4 text-slate-500 text-sm leading-loose">SVG는 크기를 아무리 키워도 깨지지 않는 벡터 파일입니다. 명함 인쇄, 대형 현수막 디자인, 혹은 웹사이트 로고로 사용할 때 적합합니다.</p>
+                    </details>
+                </div>
+            </section>
         </div>
       </div>
 
       <footer className="mt-40 py-24 bg-slate-900 text-white relative">
-        <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-12 gap-16">
-          <div className="md:col-span-4 space-y-8">
-            <div className="flex items-center gap-2 font-black text-2xl">
+        <div className="max-w-6xl mx-auto px-6 text-center space-y-8">
+            <div className="flex items-center justify-center gap-2 font-black text-2xl">
               <div className="w-10 h-10 bg-red-600 rounded-xl flex items-center justify-center text-white">
                 <i className="fa-solid fa-stamp"></i>
               </div>
-              Seal AI Pro
+              Seal AI
             </div>
-            <p className="text-slate-400 text-sm leading-relaxed">
-              이미지 처리 기술과 AI를 활용하여 인감 도장의 배경을 제거하고 전문적인 디지털 인감으로 변환해주는 프리미엄 무료 웹 서비스입니다.
-            </p>
-            <div className="flex gap-4">
-              <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors"><i className="fa-brands fa-instagram"></i></a>
-              <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors"><i className="fa-brands fa-github"></i></a>
-              <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors"><i className="fa-solid fa-envelope"></i></a>
-            </div>
-          </div>
-          
-          <div className="md:col-span-8 grid grid-cols-2 sm:grid-cols-3 gap-12">
-            <div className="space-y-6">
-              <h5 className="font-bold text-sm uppercase tracking-widest text-red-500">Service</h5>
-              <ul className="space-y-4 text-sm text-slate-400">
-                <li><button onClick={() => document.getElementById('tool')?.scrollIntoView()} className="hover:text-white transition-colors">인감 누끼 따기</button></li>
-                <li><button onClick={() => handleUpscale(2)} className="hover:text-white transition-colors">고해상도 복원</button></li>
-                <li><button className="hover:text-white transition-colors">벡터 SVG 변환</button></li>
-              </ul>
-            </div>
-            <div className="space-y-6">
-              <h5 className="font-bold text-sm uppercase tracking-widest text-red-500">Knowledge</h5>
-              <ul className="space-y-4 text-sm text-slate-400">
-                <li><button onClick={() => setShowLegal('about')} className="hover:text-white transition-colors">서비스 소개</button></li>
-                <li><a href="#knowledge" className="hover:text-white transition-colors">법적 효력 안내</a></li>
-                <li><a href="#faq" className="hover:text-white transition-colors">자주 묻는 질문</a></li>
-              </ul>
-            </div>
-            <div className="space-y-6">
-              <h5 className="font-bold text-sm uppercase tracking-widest text-red-500">Policy</h5>
-              <ul className="space-y-4 text-sm text-slate-400">
-                <li><button onClick={() => setShowLegal('privacy')} className="hover:text-white transition-colors">개인정보처리방침</button></li>
-                <li><button onClick={() => setShowLegal('terms')} className="hover:text-white transition-colors">서비스 이용약관</button></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        
-        <div className="max-w-6xl mx-auto px-6 mt-24 pt-12 border-t border-white/5 text-center space-y-4">
           <p className="text-slate-500 text-xs font-medium">© 2025 SealNukki AI Labs. All rights reserved.</p>
-          <p className="text-slate-600 text-[10px] max-w-2xl mx-auto leading-loose">
-            본 서비스는 전문적인 인감 추출 기술을 제공하며, 모든 법적 책임은 사용자에게 있습니다. 인감 이미지 오남용은 형법상 '인장위조죄' 등에 해당할 수 있으므로 각별한 주의를 바랍니다.
-          </p>
+          <div className="flex justify-center gap-6 text-xs text-slate-400">
+             <button onClick={() => setShowLegal('privacy')} className="hover:text-white">개인정보처리방침</button>
+             <button onClick={() => setShowLegal('terms')} className="hover:text-white">이용약관</button>
+          </div>
         </div>
       </footer>
 
@@ -538,28 +473,18 @@ const App: React.FC = () => {
                   <p>Seal AI Pro는 사용자가 업로드하는 이미지를 서버로 전송하지 않습니다. 모든 픽셀 프로세싱은 사용자의 웹 브라우저 내 '임시 메모리'에서 실시간으로 처리된 후 즉시 삭제됩니다.</p>
                   <p className="text-slate-900 font-bold">2. 수집하는 정보</p>
                   <p>서비스 품질 개선 및 접속 분석을 위해 익명의 기술적 데이터(브라우저 종류, 방문 경로 등)만을 수집합니다.</p>
-                  <p className="text-slate-900 font-bold">3. 제3자 광고 네트워크</p>
-                  <p>구글 애드센스와 같은 광고 파트너가 쿠키를 사용하여 방문자의 관심사에 맞는 광고를 노출할 수 있습니다.</p>
                 </>
-              ) : showLegal === 'terms' ? (
+              ) : (
                 <>
                   <p className="text-slate-900 font-bold">1. 서비스 이용 제한</p>
                   <p>본 툴을 범죄, 위조, 사기 행위에 이용하는 것은 엄격히 금지됩니다. 위법 행위 발견 시 운영진은 어떠한 책임도 지지 않으며 관계 기관에 협조할 수 있습니다.</p>
                   <p className="text-slate-900 font-bold">2. 권리 관계</p>
-                  <p>생성된 디지털 인감 이미지의 소유권은 사용자에게 있습니다. 다만, 상업적 효력을 가지는 공식 문서 사용 전 반드시 법률적 검토를 받으시기 바랍니다.</p>
-                  <p className="text-slate-900 font-bold">3. 보증의 부인</p>
-                  <p>운영진은 서비스 사용 결과의 무결성이나 법적 완결성을 보증하지 않습니다.</p>
-                </>
-              ) : (
-                <>
-                  <p className="text-slate-900 font-bold">"우리는 더 효율적인 행정 환경을 꿈꿉니다."</p>
-                  <p>포토샵을 배우지 않아도, 비싼 소프트웨어를 구독하지 않아도 누구나 고품질의 디지털 자산을 가질 수 있어야 합니다.</p>
-                  <p>Seal AI Pro는 고급 픽셀 알고리즘과 인공지능 분석 기능을 결합하여 비즈니스 효율을 극대화하는 것을 목표로 합니다. 끊임없는 기술 업데이트로 사용자 여러분께 최고의 경험을 제공하겠습니다.</p>
+                  <p>생성된 디지털 인감 이미지의 소유권은 사용자에게 있습니다.</p>
                 </>
               )}
             </div>
             <button onClick={() => setShowLegal(null)} className="w-full mt-16 py-5 bg-slate-900 text-white rounded-[24px] font-black tracking-widest hover:bg-red-600 transition-colors">
-              내용을 모두 확인했습니다
+              확인했습니다
             </button>
           </div>
         </div>
