@@ -1,8 +1,17 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { ProcessingSettings } from './types';
 import { processSealImage, upscaleAndSharpen, traceToSvg } from './utils/imageProcessor';
 
-// 이미지 주소 상수
+// 1. 타입을 여기서 직접 정의 (에러 원인 차단)
+interface ProcessingSettings {
+  redSensitivity: number;
+  lightnessThreshold: number;
+  edgeSoftness: number;
+  chromaThreshold: number;
+  targetColor: string;
+  detectionMode: 'red' | 'black' | 'mixed';
+}
+
+// 2. 이미지 주소
 const GUIDE_IMAGES = {
   step1: "https://images.unsplash.com/photo-1616588589676-62b3bd4ff6d2?w=800&q=80",
   step2: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&q=80",
@@ -33,13 +42,12 @@ const App: React.FC = () => {
   const [processedImage, setProcessedImage] = useState<string | null>(null);
   const [upscaledImage, setUpscaledImage] = useState<string | null>(null);
   
-  // 상태 변수들
   const [isProcessing, setIsProcessing] = useState(false);
   const [isUpscaling, setIsUpscaling] = useState(false);
   const [isVectorizing, setIsVectorizing] = useState(false);
-  const [settings, setSettings] = useState<ProcessingSettings>(DEFAULT_SETTINGS);
   
-  // currentScale 변수 삭제 (에러 원인 제거)
+  // 타입을 any로 풀어서 충돌 방지
+  const [settings, setSettings] = useState<any>(DEFAULT_SETTINGS);
   
   const [previewBg, setPreviewBg] = useState<PreviewBg>('checkerboard');
   const [showLegal, setShowLegal] = useState<'privacy' | 'terms' | 'about' | null>(null);
@@ -68,7 +76,6 @@ const App: React.FC = () => {
         setImage(event.target?.result as string);
         setProcessedImage(null);
         setUpscaledImage(null);
-        // 이미지가 로드되면 툴 위치로 스크롤
         setTimeout(() => {
             const toolSection = document.getElementById('tool');
             if (toolSection) {
@@ -84,7 +91,6 @@ const App: React.FC = () => {
     const canvas = processedCanvasRef.current;
     const img = imgRef.current;
     
-    // Null 체크 강화
     if (!canvas || !img) return;
 
     setIsProcessing(true);
@@ -377,17 +383,16 @@ const App: React.FC = () => {
           </div>
         </div>
 
-        {/* 콘텐츠 보강 구역 - 이미지 추가됨 */}
+        {/* 콘텐츠 보강 구역 */}
         <div id="info" className="max-w-4xl mx-auto mt-40 space-y-40">
             
-            {/* 1. 3단계 가이드 (이미지 추가) */}
+            {/* 1. 3단계 가이드 */}
             <section id="guide">
                 <div className="text-center mb-16">
                     <span className="text-red-600 font-bold text-sm tracking-widest uppercase mb-3 block">How to use</span>
                     <h2 className="text-3xl md:text-4xl font-black text-slate-900 leading-tight">3단계로 끝내는<br className="md:hidden"/> 초간단 사용법</h2>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-                    {/* Step 1 */}
                     <div className="bg-white rounded-[40px] p-6 border border-slate-100 shadow-xl shadow-slate-100/50 hover:-translate-y-2 transition-transform duration-300">
                         <div className="relative aspect-[4/3] mb-6 rounded-3xl overflow-hidden">
                             <img src={GUIDE_IMAGES.step1} alt="스마트폰으로 도장 촬영" className="absolute inset-0 w-full h-full object-cover" />
@@ -396,7 +401,6 @@ const App: React.FC = () => {
                         <h3 className="font-bold text-xl mb-3 text-slate-900">촬영하기</h3>
                         <p className="text-slate-500 text-sm leading-relaxed">흰 종이에 찍힌 도장을 스마트폰 카메라로 찍으세요. 밝은 곳일수록 좋습니다.</p>
                     </div>
-                    {/* Step 2 */}
                     <div className="bg-white rounded-[40px] p-6 border border-slate-100 shadow-xl shadow-slate-100/50 hover:-translate-y-2 transition-transform duration-300">
                         <div className="relative aspect-[4/3] mb-6 rounded-3xl overflow-hidden">
                             <img src={GUIDE_IMAGES.step2} alt="이미지 업로드 및 설정" className="absolute inset-0 w-full h-full object-cover" />
@@ -405,7 +409,6 @@ const App: React.FC = () => {
                         <h3 className="font-bold text-xl mb-3 text-slate-900">업로드 및 자동 제거</h3>
                         <p className="text-slate-500 text-sm leading-relaxed">사진을 올리면 AI가 1초 만에 배경을 지워줍니다. 설정 바로 색상도 보정하세요.</p>
                     </div>
-                    {/* Step 3 */}
                     <div className="bg-white rounded-[40px] p-6 border border-slate-100 shadow-xl shadow-slate-100/50 hover:-translate-y-2 transition-transform duration-300">
                         <div className="relative aspect-[4/3] mb-6 rounded-3xl overflow-hidden">
                             <img src={GUIDE_IMAGES.step3} alt="계약서에 적용 완료" className="absolute inset-0 w-full h-full object-cover" />
@@ -417,7 +420,7 @@ const App: React.FC = () => {
                 </div>
             </section>
 
-            {/* 2. 활용 사례 (Use Cases) */}
+            {/* 2. 활용 사례 */}
             <section id="usecases" className="bg-slate-50 rounded-[56px] p-10 md:p-20">
                 <div className="text-center mb-16">
                     <span className="text-red-600 font-bold text-sm tracking-widest uppercase mb-3 block">Utilization</span>
