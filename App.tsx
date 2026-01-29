@@ -2,6 +2,9 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 // types.ts 제거하고 내부 로직 사용
 import { processSealImage, upscaleAndSharpen, traceToSvg } from './utils/imageProcessor';
 
+// ✅ 후원 페이지 주소 (자동 적용됨)
+const BMC_LINK = "https://www.buymeacoffee.com/lala525.404";
+
 // 1. 규칙(Interface) 직접 정의
 interface ProcessingSettings {
   redSensitivity: number;
@@ -64,7 +67,8 @@ const TEXT = {
     footer: {
       privacy: "개인정보처리방침", terms: "이용약관", confirm: "확인했습니다",
       modalPrivacy: "데이터 비저장 원칙: 사용자의 이미지는 서버로 전송되지 않으며 브라우저 내에서만 처리됩니다.",
-      modalTerms: "서비스 이용 제한: 본 툴을 위조 등 불법적인 목적으로 사용하는 것은 금지됩니다."
+      modalTerms: "서비스 이용 제한: 본 툴을 위조 등 불법적인 목적으로 사용하는 것은 금지됩니다.",
+      donate: "☕️ 개발자에게 커피 쏘기"
     }
   },
   en: {
@@ -110,7 +114,8 @@ const TEXT = {
     footer: {
       privacy: "Privacy Policy", terms: "Terms of Service", confirm: "I Understand",
       modalPrivacy: "No Server Storage: Your images are processed locally in your browser and are never uploaded to any server.",
-      modalTerms: "Usage Policy: Using this tool for forgery or illegal activities is strictly prohibited."
+      modalTerms: "Usage Policy: Using this tool for forgery or illegal activities is strictly prohibited.",
+      donate: "☕️ Buy me a coffee"
     }
   }
 };
@@ -280,10 +285,10 @@ const App: React.FC = () => {
             <a href="#info" className="hover:text-red-600 transition-colors">{t.nav.info}</a>
           </div>
           <div className="flex items-center gap-3">
-            {/* 💡 여기가 그 슬라이드 버튼입니다! 확실하게 보이게 만들었습니다. */}
+            {/* 💡 슬라이드 버튼 (확실하게 보임) */}
             <button
                 onClick={() => setLang(lang === 'ko' ? 'en' : 'ko')}
-                className="relative w-14 h-8 bg-slate-200 rounded-full transition-all hover:bg-slate-300 focus:outline-none"
+                className="relative w-14 h-8 bg-slate-200 rounded-full transition-all hover:bg-slate-300 focus:outline-none shadow-inner"
                 title="언어 변경 / Change Language"
             >
                 <div className={`absolute top-1 left-1 w-6 h-6 bg-white rounded-full shadow-md flex items-center justify-center text-xs transition-all duration-300 transform ${lang === 'en' ? 'translate-x-6' : 'translate-x-0'}`}>
@@ -298,6 +303,7 @@ const App: React.FC = () => {
       </nav>
 
       <div className="pt-24 pb-20 px-4">
+        {/* 상단 광고 영역 */}
         <div className="ad-container max-w-4xl mx-auto">
           <span className="ad-label">ADVERTISEMENT</span>
           <div className="h-24 flex items-center justify-center text-slate-300 font-bold">Google Ads</div>
@@ -618,9 +624,18 @@ const App: React.FC = () => {
               Seal AI Pro
             </div>
           <p className="text-slate-500 text-xs font-medium">© 2025 SealNukki AI Labs. All rights reserved.</p>
-          <div className="flex justify-center gap-6 text-xs text-slate-400">
+          <div className="flex flex-col md:flex-row justify-center gap-6 text-xs text-slate-400 items-center">
              <button onClick={() => setShowLegal('privacy')} className="hover:text-white">{t.footer.privacy}</button>
              <button onClick={() => setShowLegal('terms')} className="hover:text-white">{t.footer.terms}</button>
+             {/* ✅ ☕️ 후원 버튼 추가됨 (노란색으로 강조) */}
+             <a 
+               href={BMC_LINK} 
+               target="_blank" 
+               rel="noopener noreferrer" 
+               className="bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-bold px-4 py-2 rounded-full flex items-center gap-2 transition-all shadow-lg hover:scale-105"
+             >
+                {t.footer.donate}
+             </a>
           </div>
         </div>
       </footer>
