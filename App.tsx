@@ -597,21 +597,42 @@ const App: React.FC = () => {
                     <h2 className="text-3xl font-black text-slate-900">{t.faq.title}</h2>
                 </div>
                 <div className="space-y-4 max-w-3xl mx-auto">
-                    <details className="bg-white rounded-2xl border border-slate-100 p-6 cursor-pointer group hover:border-red-200 transition-colors shadow-sm">
-    <summary className="font-bold flex justify-between items-center list-none text-slate-900 text-lg">
-        <span>Q. {t.faq.q4}</span>
-        <span className="text-slate-300 group-open:rotate-180 transition-transform"><i className="fa-solid fa-chevron-down"></i></span>
-    </summary>
-    <p className="mt-6 text-slate-600 leading-loose pl-4 border-l-2 border-red-100">{t.faq.a4}</p>
-</details>
-<details className="bg-white rounded-2xl border border-slate-100 p-6 cursor-pointer group hover:border-red-200 transition-colors shadow-sm">
-    <summary className="font-bold flex justify-between items-center list-none text-slate-900 text-lg">
-        <span>Q. {t.faq.q5}</span>
-        <span className="text-slate-300 group-open:rotate-180 transition-transform"><i className="fa-solid fa-chevron-down"></i></span>
-    </summary>
-    <p className="mt-6 text-slate-600 leading-loose pl-4 border-l-2 border-red-100">{t.faq.a5}</p>
-</details>
-                </div>
+    <details className="bg-white rounded-2xl border border-slate-100 p-6 cursor-pointer group hover:border-red-200 transition-colors shadow-sm">
+        <summary className="font-bold flex justify-between items-center list-none text-slate-900 text-lg">
+            <span>Q. {t.faq.q1}</span>
+            <span className="text-slate-300 group-open:rotate-180 transition-transform"><i className="fa-solid fa-chevron-down"></i></span>
+        </summary>
+        <p className="mt-6 text-slate-600 leading-loose pl-4 border-l-2 border-red-100">{t.faq.a1}</p>
+    </details>
+    <details className="bg-white rounded-2xl border border-slate-100 p-6 cursor-pointer group hover:border-red-200 transition-colors shadow-sm">
+        <summary className="font-bold flex justify-between items-center list-none text-slate-900 text-lg">
+            <span>Q. {t.faq.q2}</span>
+            <span className="text-slate-300 group-open:rotate-180 transition-transform"><i className="fa-solid fa-chevron-down"></i></span>
+        </summary>
+        <p className="mt-6 text-slate-600 leading-loose pl-4 border-l-2 border-red-100">{t.faq.a2}</p>
+    </details>
+    <details className="bg-white rounded-2xl border border-slate-100 p-6 cursor-pointer group hover:border-red-200 transition-colors shadow-sm">
+        <summary className="font-bold flex justify-between items-center list-none text-slate-900 text-lg">
+            <span>Q. {t.faq.q3}</span>
+            <span className="text-slate-300 group-open:rotate-180 transition-transform"><i className="fa-solid fa-chevron-down"></i></span>
+        </summary>
+        <p className="mt-6 text-slate-600 leading-loose pl-4 border-l-2 border-red-100">{t.faq.a3}</p>
+    </details>
+    <details className="bg-white rounded-2xl border border-slate-100 p-6 cursor-pointer group hover:border-red-200 transition-colors shadow-sm">
+        <summary className="font-bold flex justify-between items-center list-none text-slate-900 text-lg">
+            <span>Q. {t.faq.q4}</span>
+            <span className="text-slate-300 group-open:rotate-180 transition-transform"><i className="fa-solid fa-chevron-down"></i></span>
+        </summary>
+        <p className="mt-6 text-slate-600 leading-loose pl-4 border-l-2 border-red-100">{t.faq.a4}</p>
+    </details>
+    <details className="bg-white rounded-2xl border border-slate-100 p-6 cursor-pointer group hover:border-red-200 transition-colors shadow-sm">
+        <summary className="font-bold flex justify-between items-center list-none text-slate-900 text-lg">
+            <span>Q. {t.faq.q5}</span>
+            <span className="text-slate-300 group-open:rotate-180 transition-transform"><i className="fa-solid fa-chevron-down"></i></span>
+        </summary>
+        <p className="mt-6 text-slate-600 leading-loose pl-4 border-l-2 border-red-100">{t.faq.a5}</p>
+    </details>
+</div>
             </section>
         </div>
       </div>
