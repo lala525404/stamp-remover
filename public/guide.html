@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>도장 누끼 완전 가이드 - 포토샵 없이 투명 인감 만들기 | Seal AI Pro</title>
+  <meta name="description" content="스마트폰으로 찍은 도장 사진으로 투명 배경 PNG를 만드는 방법을 단계별로 설명합니다. 한글, 워드, 엑셀, 전자계약서에 도장 넣는 법까지 완전 정리." />
+  <link rel="canonical" href="https://stamp-remover.vercel.app/guide.html" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Noto Sans KR', -apple-system, sans-serif; background: #f8fafc; color: #334155; line-height: 1.9; }
+    header { background: #fff; border-bottom: 1px solid #e2e8f0; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 900; font-size: 18px; color: #0f172a; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: #dc2626; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+    .back-btn { background: #f1f5f9; border: none; padding: 8px 18px; border-radius: 50px; font-size: 13px; font-weight: 700; color: #475569; cursor: pointer; text-decoration: none; }
+    article { max-width: 780px; margin: 0 auto; padding: 64px 24px 80px; }
+    .article-meta { display: flex; gap: 12px; align-items: center; margin-bottom: 32px; flex-wrap: wrap; }
+    .tag { background: #fef2f2; color: #dc2626; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 50px; }
+    .date { font-size: 13px; color: #94a3b8; }
+    h1 { font-size: 34px; font-weight: 900; color: #0f172a; line-height: 1.35; margin-bottom: 20px; }
+    .lead { font-size: 17px; color: #64748b; line-height: 1.8; margin-bottom: 48px; padding-bottom: 48px; border-bottom: 1px solid #e2e8f0; }
+    h2 { font-size: 22px; font-weight: 800; color: #0f172a; margin: 48px 0 16px; padding-left: 16px; border-left: 4px solid #dc2626; }
+    h3 { font-size: 17px; font-weight: 700; color: #1e293b; margin: 28px 0 10px; }
+    p { font-size: 15px; color: #475569; margin-bottom: 16px; }
+    ul, ol { padding-left: 24px; margin-bottom: 16px; }
+    li { font-size: 15px; color: #475569; margin-bottom: 10px; line-height: 1.7; }
+    .step-box { background: #fff; border: 1px solid #e2e8f0; border-radius: 20px; padding: 28px 32px; margin: 20px 0; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+    .step-number { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: #dc2626; color: white; border-radius: 10px; font-weight: 900; font-size: 16px; margin-bottom: 12px; }
+    .step-box h3 { margin-top: 0; }
+    .tip-box { background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 16px; padding: 20px 24px; margin: 20px 0; }
+    .tip-box::before { content: '💡 팁 '; font-weight: 700; color: #0284c7; }
+    .tip-box p { color: #0369a1; margin: 0; font-size: 14px; }
+    .warning-box { background: #fffbeb; border: 1px solid #fde68a; border-radius: 16px; padding: 20px 24px; margin: 20px 0; }
+    .warning-box::before { content: '⚠️ 주의 '; font-weight: 700; color: #b45309; }
+    .warning-box p { color: #92400e; margin: 0; font-size: 14px; }
+    .faq-item { background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 24px; margin-bottom: 12px; }
+    .faq-item .q { font-weight: 700; color: #dc2626; margin-bottom: 8px; font-size: 15px; }
+    .faq-item .a { color: #475569; font-size: 14px; margin: 0; }
+    .cta-box { background: #0f172a; color: white; border-radius: 24px; padding: 40px; text-align: center; margin: 48px 0; }
+    .cta-box h2 { color: white; border: none; padding: 0; margin: 0 0 12px; }
+    .cta-box p { color: #94a3b8; margin-bottom: 24px; }
+    .cta-btn { display: inline-block; background: #dc2626; color: white; font-weight: 900; padding: 14px 36px; border-radius: 50px; text-decoration: none; font-size: 15px; }
+    .cta-btn:hover { background: #b91c1c; }
+    table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 14px; }
+    th { background: #f1f5f9; padding: 12px 16px; text-align: left; font-weight: 700; color: #374151; border: 1px solid #e2e8f0; }
+    td { padding: 12px 16px; border: 1px solid #e2e8f0; color: #475569; vertical-align: top; }
+    footer-note { display: block; text-align: center; color: #94a3b8; font-size: 13px; margin-top: 48px; }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="/" class="logo">
+      <div class="logo-icon">🔏</div>
+      Seal AI Pro
+    </a>
+    <a href="/" class="back-btn">← 도구로 돌아가기</a>
+  </header>
+
+  <article>
+    <div class="article-meta">
+      <span class="tag">사용 가이드</span>
+      <span class="tag">전자계약</span>
+      <span class="date">2025년 1월 발행</span>
+    </div>
+
+    <h1>포토샵 없이 인감 누끼 따는 법 — 도장 배경 제거 완전 가이드</h1>
+
+    <p class="lead">
+      인감 도장을 전자계약서나 문서에 넣으려면 배경이 투명한 PNG 파일이 필요합니다. 예전에는 포토샵으로 직접 배경을 지워야 했지만, 지금은 무료 온라인 도구를 사용하면 스마트폰으로 찍은 도장 사진도 3초 만에 투명 배경으로 만들 수 있습니다. 이 가이드에서는 도장 촬영 팁부터 한글, 워드, 엑셀, 전자계약 플랫폼에 삽입하는 방법까지 모든 과정을 단계별로 설명합니다.
+    </p>
+
+    <h2>1. 도장 사진 잘 찍는 법</h2>
+    <p>배경 제거 품질의 80%는 원본 사진 품질에 달려 있습니다. 아래 조건을 지키면 훨씬 깔끔한 결과를 얻을 수 있습니다.</p>
+
+    <div class="step-box">
+      <div class="step-number">1</div>
+      <h3>흰 종이 위에 찍기</h3>
+      <p>도장을 흰 A4 용지 위에 찍고, 그 종이를 촬영하세요. 배경이 순백일수록 AI가 도장 잉크만 정확하게 분리할 수 있습니다. 노란빛이 도는 갱지나 색지는 피하세요.</p>
+    </div>
+
+    <div class="step-box">
+      <div class="step-number">2</div>
+      <h3>밝은 자연광에서 촬영</h3>
+      <p>형광등보다는 창가의 자연광이 가장 좋습니다. 형광등은 색온도에 따라 흰 종이가 노랗거나 파랗게 찍혀 배경 분리에 영향을 줄 수 있습니다. 직사광선은 그림자를 만들 수 있으니 간접광이 이상적입니다.</p>
+    </div>
+
+    <div class="step-box">
+      <div class="step-number">3</div>
+      <h3>카메라를 도장과 수직으로</h3>
+      <p>스마트폰을 도장 정면 위에서 수직으로 내려다보며 찍으세요. 각도가 기울면 도장 테두리가 타원형으로 찍혀 SVG 변환 시 품질이 저하됩니다.</p>
+    </div>
+
+    <div class="tip-box">
+      <p>도장이 너무 연하게 찍혔다면 Seal AI Pro의 "추출 민감도"를 높여보세요. 반대로 도장 주변에 잉크 번짐이 생겼다면 민감도를 낮추면 됩니다.</p>
+    </div>
+
+    <h2>2. Seal AI Pro로 배경 제거하기</h2>
+    <p>사진이 준비됐다면, 이제 Seal AI Pro에서 배경을 제거합니다.</p>
+
+    <div class="step-box">
+      <div class="step-number">1</div>
+      <h3>이미지 업로드</h3>
+      <p>메인 페이지의 업로드 영역을 클릭하거나, 파일을 드래그&드롭합니다. JPG, PNG, HEIC(아이폰 사진) 등 대부분의 이미지 형식을 지원합니다.</p>
+    </div>
+
+    <div class="step-box">
+      <div class="step-number">2</div>
+      <h3>도장 색상 모드 선택</h3>
+      <p>오른쪽 설정 패널에서 "빨간 인감" 또는 "검정 도장"을 선택합니다. 빨간 인감은 HSL 색상 공간에서 빨간색 계열(Hue 0°~20°, 340°~360°)을 추출하고, 검정 도장은 낮은 명도(Lightness) 기반으로 추출합니다.</p>
+    </div>
+
+    <div class="step-box">
+      <div class="step-number">3</div>
+      <h3>민감도 조절</h3>
+      <p>미리보기를 보면서 "추출 민감도" 슬라이더를 조절하세요. 도장이 흐리거나 연하면 높이고, 잉크가 번져서 주변까지 추출되면 낮추면 됩니다.</p>
+    </div>
+
+    <div class="step-box">
+      <div class="step-number">4</div>
+      <h3>PNG 또는 SVG로 저장</h3>
+      <p>결과가 만족스러우면 "PNG 저장" 버튼으로 다운로드합니다. 대형 인쇄나 벡터 편집이 필요한 경우 "SVG 벡터" 버튼을 사용하세요. 화질이 조금 더 필요하다면 "화질 개선(2×)" 버튼을 먼저 누른 후 저장하세요.</p>
+    </div>
+
+    <h2>3. 문서별 도장 삽입 방법</h2>
+
+    <h3>한글(HWP)에 도장 넣기</h3>
+    <ol>
+      <li>[입력] → [그림] → 저장한 PNG 파일 선택</li>
+      <li>그림이 삽입되면, 그림을 우클릭 → [개체 속성]</li>
+      <li>[기본] 탭에서 "글 뒤로" 또는 "어울림" 선택</li>
+      <li>도장을 서명란 위로 이동하여 위치 조정</li>
+    </ol>
+    <div class="tip-box">
+      <p>한글에서 도장 크기가 너무 크게 삽입되면, 개체 속성 창에서 가로/세로 크기(mm 단위)를 직접 입력하여 조정하세요. 인감 도장 표준 크기는 지름 약 18~25mm입니다.</p>
+    </div>
+
+    <h3>MS Word / Google Docs에 도장 넣기</h3>
+    <ol>
+      <li>[삽입] → [그림] → [이 장치에서] → PNG 파일 선택</li>
+      <li>삽입된 이미지 클릭 → [그림 서식] → [텍스트 줄 바꿈] → "앞으로" 또는 "뒤로" 선택</li>
+      <li>원하는 위치로 드래그</li>
+    </ol>
+
+    <h3>MS Excel / Google Sheets에 도장 넣기</h3>
+    <ol>
+      <li>[삽입] → [그림] → PNG 파일 선택</li>
+      <li>도장 이미지를 드래그하여 서명란 셀 위에 위치</li>
+      <li>우클릭 → [그림 서식] → 투명도 조절도 가능</li>
+    </ol>
+    <div class="warning-box">
+      <p>엑셀에서 셀 안에 이미지를 고정하려면, 이미지를 우클릭 → [크기 및 속성] → "셀에 맞게 이동하지 않음"을 해제하고 "셀에 맞게 이동"을 선택하세요.</p>
+    </div>
+
+    <h3>전자계약 플랫폼(모두싸인, 싸인이큐 등)에 넣기</h3>
+    <ol>
+      <li>전자계약 서명 단계에서 "이미지로 서명" 또는 "도장 이미지 업로드" 옵션 선택</li>
+      <li>Seal AI Pro에서 만든 투명 PNG 파일 업로드</li>
+      <li>계약서 서명란에 크기 조절 후 배치</li>
+    </ol>
+    <div class="tip-box">
+      <p>모두싸인의 경우 PNG 이미지를 서명으로 업로드할 때 배경이 투명해야 서명란에 자연스럽게 표시됩니다. 배경이 흰색이면 서명란 위에 흰 사각형이 생겨 어색하게 보일 수 있습니다.</p>
+    </div>
+
+    <h2>4. 도구 비교 — 어떤 서비스를 써야 할까?</h2>
+    <table>
+      <tr>
+        <th>서비스</th>
+        <th>도장에 적합?</th>
+        <th>비용</th>
+        <th>서버 업로드</th>
+      </tr>
+      <tr>
+        <td><strong>Seal AI Pro</strong></td>
+        <td>✅ 도장 전용 알고리즘</td>
+        <td>무료</td>
+        <td>없음 (로컬)</td>
+      </tr>
+      <tr>
+        <td>remove.bg</td>
+        <td>⚠️ 일반 배경 제거에 최적화</td>
+        <td>유료 (월정액)</td>
+        <td>서버 업로드</td>
+      </tr>
+      <tr>
+        <td>포토샵</td>
+        <td>✅ 수동 정밀 작업 가능</td>
+        <td>유료 (월정액)</td>
+        <td>없음</td>
+      </tr>
+      <tr>
+        <td>Canva</td>
+        <td>⚠️ 배경 제거 기능 있으나 도장 특화 아님</td>
+        <td>부분 유료</td>
+        <td>서버 업로드</td>
+      </tr>
+    </table>
+    <p>도장, 인감처럼 단순한 색상 기반 추출에는 Seal AI Pro의 HSL 기반 알고리즘이 가장 적합합니다. 특히 이미지를 서버에 업로드하지 않아도 되는 보안 측면에서 인감 이미지 처리에 특히 유용합니다.</p>
+
+    <h2>5. 자주 묻는 질문</h2>
+
+    <div class="faq-item">
+      <div class="q">Q. 아이폰에서 찍은 HEIC 사진도 되나요?</div>
+      <p class="a">아이폰의 기본 카메라 포맷인 HEIC도 지원합니다. 단, 일부 구형 브라우저에서는 변환이 안 될 수 있으니, 아이폰 설정에서 카메라 포맷을 "JPEG 호환"으로 변경하면 더 안정적으로 사용할 수 있습니다.</p>
+    </div>
+
+    <div class="faq-item">
+      <div class="q">Q. 도장 색깔을 파란색이나 금색으로 바꿀 수 있나요?</div>
+      <p class="a">가능합니다. 오른쪽 패널의 "전문적인 리컬러" 섹션에서 프리셋 색상(빨간색, 검정색, 네이비, 골드 등) 을 선택하거나, 색상 피커로 원하는 색상을 직접 지정하면 됩니다.</p>
+    </div>
+
+    <div class="faq-item">
+      <div class="q">Q. SVG 파일이 뭔가요? PNG랑 뭐가 다른가요?</div>
+      <p class="a">PNG는 픽셀 기반 이미지로, 크게 확대하면 계단 현상(깨짐)이 생깁니다. SVG는 수학적 곡선으로 이루어진 벡터 파일로, 아무리 확대해도 선이 깔끔합니다. 일반 문서 삽입에는 PNG로 충분하지만, 현수막 인쇄나 어도비 일러스트레이터 등 디자인 작업에는 SVG를 추천합니다.</p>
+    </div>
+
+    <div class="faq-item">
+      <div class="q">Q. 전자 도장은 법적 효력이 있나요?</div>
+      <p class="a">대한민국 전자서명법 제3조에 따라, 전자적 형태의 서명은 단지 전자적 형태라는 이유만으로 법적 효력이 부인되지 않습니다. 다만 부동산 매매, 법인 등기 등 실물 인감증명서가 필요한 계약에는 전자 도장만으로는 부족합니다. 일반 업무용 계약서, 견적서, 이력서 등에는 충분히 활용할 수 있습니다.</p>
+    </div>
+
+    <div class="faq-item">
+      <div class="q">Q. 도장 배경이 완전히 제거되지 않고 흐릿하게 남아요.</div>
+      <p class="a">"배경 제거 세기" 슬라이더를 오른쪽으로 올려보세요. 그래도 안 된다면, 원본 사진의 조명이 불균일하여 배경이 회색빛으로 찍혔을 가능성이 있습니다. 더 밝은 환경에서 다시 촬영하는 것이 가장 효과적입니다.</p>
+    </div>
+
+    <div class="cta-box">
+      <h2>지금 바로 시작해보세요</h2>
+      <p>회원가입 없이 무료로 사용할 수 있습니다.<br/>도장 사진 한 장만 준비하세요.</p>
+      <a href="/" class="cta-btn">🔏 무료로 도장 누끼 따기</a>
+    </div>
+
+    <footer-note>© 2025 Seal AI Pro. All rights reserved. &nbsp;|&nbsp; <a href="/privacy.html" style="color:#94a3b8;">개인정보처리방침</a> &nbsp;|&nbsp; <a href="/terms.html" style="color:#94a3b8;">이용약관</a> &nbsp;|&nbsp; <a href="/about.html" style="color:#94a3b8;">서비스 소개</a></footer-note>
+  </article>
+</body>
+</html>
