@@ -25,7 +25,6 @@ const GUIDE_IMAGES = {
 // 3. 다국어 텍스트 팩
 const TEXT = {
   ko: {
-    // 💡 nav에 donate(후원) 텍스트 추가
     nav: { tool: "누끼 따기", guide: "가이드", info: "정보", start: "시작하기", donate: "후원하기" },
     hero: {
       title: <>전문가 수준의 <br className="md:hidden" /><span className="text-red-600 underline decoration-red-100 underline-offset-8">인감 누끼</span>를 <br className="hidden md:block"/>단 3초 만에</>,
@@ -66,9 +65,8 @@ const TEXT = {
       q3: "스마트폰에서도 되나요?", a3: "네, 별도 앱 설치 없이 아이폰/갤럭시 브라우저에서 바로 사용 가능합니다."
     },
     footer: {
-      privacy: "개인정보처리방침", terms: "이용약관", confirm: "확인했습니다",
-      modalPrivacy: "데이터 비저장 원칙: 사용자의 이미지는 서버로 전송되지 않으며 브라우저 내에서만 처리됩니다.",
-      modalTerms: "서비스 이용 제한: 본 툴을 위조 등 불법적인 목적으로 사용하는 것은 금지됩니다.",
+      privacy: "개인정보처리방침", terms: "이용약관",
+      about: "서비스 소개", guideLink: "사용 가이드",
       donate: "☕️ 개발자에게 커피 쏘기"
     }
   },
@@ -113,9 +111,8 @@ const TEXT = {
       q3: "Does it work on mobile?", a3: "Yes, it works perfectly on iPhone and Android browsers without installing any app."
     },
     footer: {
-      privacy: "Privacy Policy", terms: "Terms of Service", confirm: "I Understand",
-      modalPrivacy: "No Server Storage: Your images are processed locally in your browser and are never uploaded to any server.",
-      modalTerms: "Usage Policy: Using this tool for forgery or illegal activities is strictly prohibited.",
+      privacy: "Privacy Policy", terms: "Terms of Service",
+      about: "About", guideLink: "Guide",
       donate: "☕️ Buy me a coffee"
     }
   }
@@ -154,7 +151,6 @@ const App: React.FC = () => {
   
   const [settings, setSettings] = useState<any>(DEFAULT_SETTINGS);
   const [previewBg, setPreviewBg] = useState<PreviewBg>('checkerboard');
-  const [showLegal, setShowLegal] = useState<'privacy' | 'terms' | 'about' | null>(null);
   
   const processedCanvasRef = useRef<HTMLCanvasElement>(null);
   const upscaleCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -286,7 +282,6 @@ const App: React.FC = () => {
             <a href="#info" className="hover:text-red-600 transition-colors">{t.nav.info}</a>
           </div>
           <div className="flex items-center gap-2 md:gap-3">
-            {/* 💡 GNB 후원 버튼 (노란색) 추가됨 */}
             <a 
                href={BMC_LINK} 
                target="_blank" 
@@ -297,8 +292,6 @@ const App: React.FC = () => {
                 <span>☕️</span>
                 <span className="hidden md:inline">{t.nav.donate}</span>
             </a>
-
-            {/* 언어 변경 버튼 */}
             <button
                 onClick={() => setLang(lang === 'ko' ? 'en' : 'ko')}
                 className="relative w-12 md:w-14 h-7 md:h-8 bg-slate-200 rounded-full transition-all hover:bg-slate-300 focus:outline-none shadow-inner"
@@ -638,10 +631,11 @@ const App: React.FC = () => {
             </div>
           <p className="text-slate-500 text-xs font-medium">© 2025 SealNukki AI Labs. All rights reserved.</p>
           <div className="flex flex-col md:flex-row justify-center gap-6 text-xs text-slate-400 items-center">
-             <button onClick={() => setShowLegal('privacy')} className="hover:text-white">{t.footer.privacy}</button>
-             <button onClick={() => setShowLegal('terms')} className="hover:text-white">{t.footer.terms}</button>
-             {/* 하단 후원 버튼도 유지 (사용자 눈에 더 많이 띄게) */}
-             <a 
+            <a href="/privacy.html" target="_blank" rel="noopener noreferrer" className="hover:text-white">{t.footer.privacy}</a>
+            <a href="/terms.html" target="_blank" rel="noopener noreferrer" className="hover:text-white">{t.footer.terms}</a>
+            <a href="/about.html" target="_blank" rel="noopener noreferrer" className="hover:text-white">{t.footer.about}</a>
+            <a href="/guide.html" target="_blank" rel="noopener noreferrer" className="hover:text-white">{t.footer.guideLink}</a>
+            <a 
                href={BMC_LINK} 
                target="_blank" 
                rel="noopener noreferrer" 
@@ -652,37 +646,9 @@ const App: React.FC = () => {
           </div>
         </div>
       </footer>
-
-      {showLegal && (
-        <div className="fixed inset-0 z-[100] bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-6 animate-in fade-in duration-500">
-          <div className="bg-white rounded-[40px] max-w-2xl w-full max-h-[85vh] overflow-y-auto p-12 md:p-16 shadow-2xl relative">
-            <button onClick={() => setShowLegal(null)} className="absolute top-10 right-10 text-slate-300 hover:text-slate-900 transition-colors">
-              <i className="fa-solid fa-xmark text-2xl"></i>
-            </button>
-            <h2 className="text-3xl font-black mb-12 tracking-tight">
-                {showLegal === 'privacy' ? t.footer.privacy : t.footer.terms}
-            </h2>
-            <div className="text-slate-600 text-sm leading-loose space-y-8 font-medium">
-              {showLegal === 'privacy' ? (
-                <>
-                  <p className="text-slate-900 font-bold">{t.footer.privacy}</p>
-                  <p>{t.footer.modalPrivacy}</p>
-                </>
-              ) : (
-                <>
-                  <p className="text-slate-900 font-bold">{t.footer.terms}</p>
-                  <p>{t.footer.modalTerms}</p>
-                </>
-              )}
-            </div>
-            <button onClick={() => setShowLegal(null)} className="w-full mt-16 py-5 bg-slate-900 text-white rounded-[24px] font-black tracking-widest hover:bg-red-600 transition-colors">
-              {t.footer.confirm}
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
 
 export default App;
+
