@@ -58,12 +58,14 @@ const TEXT = {
       securityTitle: "완벽한 보안 (Client-Side)", securityDesc: "이미지를 서버로 전송하지 않습니다. 브라우저 내부에서만 처리되어 개인정보 유출 걱정이 없습니다.",
       techTitle: "무한 확대 SVG 기술", techDesc: "단순 픽셀 제거를 넘어 벡터(Vector) 파일로 변환하여, 대형 현수막에 인쇄해도 깨지지 않습니다."
     },
-    faq: {
-      title: "자주 묻는 질문",
-      q1: "한글 파일(HWP)에도 넣을 수 있나요?", a1: "네, 가능합니다. [입력] -> [그림]으로 이미지를 넣고 속성을 '글 뒤로' 설정하세요.",
-      q2: "도장 색깔을 바꿀 수 있나요?", a2: "물론입니다. '전문적인 리컬러' 기능으로 선명한 빨간색이나 검정색으로 변경 가능합니다.",
-      q3: "스마트폰에서도 되나요?", a3: "네, 별도 앱 설치 없이 아이폰/갤럭시 브라우저에서 바로 사용 가능합니다."
-    },
+   faq: {
+  title: "자주 묻는 질문",
+  q1: "한글 파일(HWP)에도 넣을 수 있나요?", a1: "네, 가능합니다. [입력] -> [그림]으로 이미지를 넣고 속성을 '글 뒤로' 설정하세요.",
+  q2: "도장 색깔을 바꿀 수 있나요?", a2: "물론입니다. '전문적인 리컬러' 기능으로 선명한 빨간색이나 검정색으로 변경 가능합니다.",
+  q3: "스마트폰에서도 되나요?", a3: "네, 별도 앱 설치 없이 아이폰/갤럭시 브라우저에서 바로 사용 가능합니다.",
+  q4: "이미지가 서버에 저장되나요?", a4: "아니요, 절대 저장되지 않습니다. 모든 처리는 사용자의 브라우저 내에서만 이루어지며 이미지가 외부로 전송되지 않습니다.",
+  q5: "SVG 파일은 어디에 쓰나요?", a5: "SVG는 벡터 파일로 아무리 확대해도 깨지지 않습니다. 대형 인쇄물, 어도비 일러스트레이터 등 디자인 작업에 적합합니다. 일반 문서 삽입에는 PNG로 충분합니다."
+},
     footer: {
       privacy: "개인정보처리방침", terms: "이용약관",
       about: "서비스 소개", guideLink: "사용 가이드",
@@ -105,11 +107,11 @@ const TEXT = {
       techTitle: "Infinite Zoom SVG", techDesc: "We convert your stamp into a Vector (SVG) file. It stays sharp even when printed on huge banners."
     },
     faq: {
-      title: "Frequently Asked Questions",
-      q1: "Can I use this in Word/Docs?", a1: "Yes! Insert the downloaded PNG image and set 'Text Wrap' to 'Behind Text' to make it look natural.",
-      q2: "Can I change the ink color?", a2: "Absolutely. Use the 'Pro Recolor' feature to make faint stamps look like vivid red or professional black.",
-      q3: "Does it work on mobile?", a3: "Yes, it works perfectly on iPhone and Android browsers without installing any app."
-    },
+  title: "Frequently Asked Questions",
+  q1: "Can I use this in Word/Docs?", a1: "Yes! Insert the downloaded PNG image and set 'Text Wrap' to 'Behind Text' to make it look natural.",
+  q2: "Can I change the ink color?", a2: "Absolutely. Use the 'Pro Recolor' feature to make faint stamps look like vivid red or professional black.",
+  q3: "Does it work on mobile?", a3: "Yes, it works perfectly on iPhone and Android browsers without installing any app."
+},
     footer: {
       privacy: "Privacy Policy", terms: "Terms of Service",
       about: "About", guideLink: "Guide",
@@ -596,26 +598,19 @@ const App: React.FC = () => {
                 </div>
                 <div className="space-y-4 max-w-3xl mx-auto">
                     <details className="bg-white rounded-2xl border border-slate-100 p-6 cursor-pointer group hover:border-red-200 transition-colors shadow-sm">
-                        <summary className="font-bold flex justify-between items-center list-none text-slate-900 text-lg">
-                            <span>Q. {t.faq.q1}</span>
-                            <span className="text-slate-300 group-open:rotate-180 transition-transform"><i className="fa-solid fa-chevron-down"></i></span>
-                        </summary>
-                        <p className="mt-6 text-slate-600 leading-loose pl-4 border-l-2 border-red-100">{t.faq.a1}</p>
-                    </details>
-                    <details className="bg-white rounded-2xl border border-slate-100 p-6 cursor-pointer group hover:border-red-200 transition-colors shadow-sm">
-                        <summary className="font-bold flex justify-between items-center list-none text-slate-900 text-lg">
-                            <span>Q. {t.faq.q2}</span>
-                            <span className="text-slate-300 group-open:rotate-180 transition-transform"><i className="fa-solid fa-chevron-down"></i></span>
-                        </summary>
-                        <p className="mt-6 text-slate-600 leading-loose pl-4 border-l-2 border-red-100">{t.faq.a2}</p>
-                    </details>
-                    <details className="bg-white rounded-2xl border border-slate-100 p-6 cursor-pointer group hover:border-red-200 transition-colors shadow-sm">
-                        <summary className="font-bold flex justify-between items-center list-none text-slate-900 text-lg">
-                            <span>Q. {t.faq.q3}</span>
-                            <span className="text-slate-300 group-open:rotate-180 transition-transform"><i className="fa-solid fa-chevron-down"></i></span>
-                        </summary>
-                        <p className="mt-6 text-slate-600 leading-loose pl-4 border-l-2 border-red-100">{t.faq.a3}</p>
-                    </details>
+    <summary className="font-bold flex justify-between items-center list-none text-slate-900 text-lg">
+        <span>Q. {t.faq.q4}</span>
+        <span className="text-slate-300 group-open:rotate-180 transition-transform"><i className="fa-solid fa-chevron-down"></i></span>
+    </summary>
+    <p className="mt-6 text-slate-600 leading-loose pl-4 border-l-2 border-red-100">{t.faq.a4}</p>
+</details>
+<details className="bg-white rounded-2xl border border-slate-100 p-6 cursor-pointer group hover:border-red-200 transition-colors shadow-sm">
+    <summary className="font-bold flex justify-between items-center list-none text-slate-900 text-lg">
+        <span>Q. {t.faq.q5}</span>
+        <span className="text-slate-300 group-open:rotate-180 transition-transform"><i className="fa-solid fa-chevron-down"></i></span>
+    </summary>
+    <p className="mt-6 text-slate-600 leading-loose pl-4 border-l-2 border-red-100">{t.faq.a5}</p>
+</details>
                 </div>
             </section>
         </div>
