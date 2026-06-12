@@ -27,8 +27,8 @@ const TEXT = {
   ko: {
     nav: { tool: "누끼 따기", guide: "가이드", info: "정보", start: "시작하기", donate: "후원하기" },
     hero: {
-      title: <>전문가 수준의 <br className="md:hidden" /><span className="text-red-600 underline decoration-red-100 underline-offset-8">인감 누끼</span>를 <br className="hidden md:block"/>단 3초 만에</>,
-      desc: <>복잡한 포토샵 없이 인공지능이 도장만 쏙! <br className="md:hidden"/>전자계약, 공문서, 디자인 프로젝트를 위한 고품질 투명 인감을 만드세요.</>,
+      title: <>포토샵 없이 <br className="md:hidden" /><span className="text-red-600 underline decoration-red-100 underline-offset-8">도장 누끼</span>를 <br className="hidden md:block"/>단 3초 만에</>,
+      desc: <>인감, 직인, 회사도장 이미지를 업로드하면 배경을 자동 제거합니다. <br className="md:hidden"/>도장 누끼따기, 직인 배경제거, 투명 PNG 변환 무료 지원.</>,
       badge1: "무제한 무료", badge2: "기기 내 로컬 처리", badge3: "SVG 벡터 지원"
     },
     upload: { title: "인감 이미지 가져오기", desc: <>여기를 클릭하거나 파일을 드래그하여 <br/>도장 이미지를 업로드하세요.</> },
