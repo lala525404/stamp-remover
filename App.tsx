@@ -27,8 +27,8 @@ const TEXT = {
   ko: {
     nav: { tool: "누끼 따기", guide: "가이드", info: "정보", start: "시작하기", donate: "후원하기" },
     hero: {
-      title: <>포토샵 없이 <br className="md:hidden" /><span className="text-red-600 underline decoration-red-100 underline-offset-8">도장 누끼</span>를 <br className="hidden md:block"/>단 3초 만에</>,
-      desc: <>인감, 직인, 회사도장 이미지를 업로드하면 배경을 자동 제거합니다. <br className="md:hidden"/>도장 누끼따기, 직인 배경제거, 투명 PNG 변환 무료 지원.</>,
+      title: <>전문가 수준의 <br className="md:hidden" /><span className="text-red-600 underline decoration-red-100 underline-offset-8">인감 누끼</span>를 <br className="hidden md:block"/>단 3초 만에</>,
+      desc: <>복잡한 포토샵 없이 인공지능이 도장만 쏙! <br className="md:hidden"/>전자계약, 공문서, 디자인 프로젝트를 위한 고품질 투명 인감을 만드세요.</>,
       badge1: "무제한 무료", badge2: "기기 내 로컬 처리", badge3: "SVG 벡터 지원"
     },
     upload: { title: "인감 이미지 가져오기", desc: <>여기를 클릭하거나 파일을 드래그하여 <br/>도장 이미지를 업로드하세요.</> },
@@ -319,33 +319,8 @@ const App: React.FC = () => {
       </nav>
 
       <div className="pt-24 pb-20 px-4">
-        {/* 상단 광고 영역 */}
-        <div className="ad-container max-w-4xl mx-auto">
-          <span className="ad-label">ADVERTISEMENT</span>
-          <div className="h-24 flex items-center justify-center text-slate-300 font-bold">Google Ads</div>
-        </div>
 
-        <header className="max-w-4xl mx-auto text-center mb-16 px-4">
-          <h1 className="text-4xl md:text-6xl font-black text-slate-900 mb-6 tracking-tight leading-tight">
-            {t.hero.title}
-          </h1>
-          <p className="text-lg text-slate-500 mb-10 leading-relaxed font-medium">
-            {t.hero.desc}
-          </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm border border-slate-100 text-xs font-bold text-slate-600">
-              <i className="fa-solid fa-check text-green-500"></i> {t.hero.badge1}
-            </div>
-            <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm border border-slate-100 text-xs font-bold text-slate-600">
-              <i className="fa-solid fa-check text-green-500"></i> {t.hero.badge2}
-            </div>
-            <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm border border-slate-100 text-xs font-bold text-slate-600">
-              <i className="fa-solid fa-check text-green-500"></i> {t.hero.badge3}
-            </div>
-          </div>
-        </header>
-
-        {/* 메인 툴 영역 */}
+        {/* 메인 툴 영역 - 최상단 */}
         <div id="tool" className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           <div className="lg:col-span-8 space-y-8 order-1 lg:order-1">
             {!image ? (
@@ -507,7 +482,38 @@ const App: React.FC = () => {
           </div>
         </div>
 
-        <div id="info" className="max-w-4xl mx-auto mt-40 space-y-40">
+        {/* 타이틀 + 광고 영역 */}
+        <div className="max-w-6xl mx-auto mt-16 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          {/* 타이틀/히어로 */}
+          <header className="lg:col-span-7 text-center lg:text-left px-4">
+            <h1 className="text-4xl md:text-5xl font-black text-slate-900 mb-6 tracking-tight leading-tight">
+              {t.hero.title}
+            </h1>
+            <p className="text-lg text-slate-500 mb-8 leading-relaxed font-medium">
+              {t.hero.desc}
+            </p>
+            <div className="flex flex-wrap justify-center lg:justify-start gap-4">
+              <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm border border-slate-100 text-xs font-bold text-slate-600">
+                <i className="fa-solid fa-check text-green-500"></i> {t.hero.badge1}
+              </div>
+              <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm border border-slate-100 text-xs font-bold text-slate-600">
+                <i className="fa-solid fa-check text-green-500"></i> {t.hero.badge2}
+              </div>
+              <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm border border-slate-100 text-xs font-bold text-slate-600">
+                <i className="fa-solid fa-check text-green-500"></i> {t.hero.badge3}
+              </div>
+            </div>
+          </header>
+          {/* 광고 */}
+          <div className="lg:col-span-5">
+            <div className="ad-container">
+              <span className="ad-label">ADVERTISEMENT</span>
+              <div className="h-48 flex items-center justify-center text-slate-300 font-bold">Google Ads</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="info" className="max-w-4xl mx-auto mt-24 space-y-40">
             <section id="guide">
                 <div className="text-center mb-16">
                     <span className="text-red-600 font-bold text-sm tracking-widest uppercase mb-3 block">How to use</span>
@@ -696,5 +702,4 @@ const App: React.FC = () => {
 };
 
 export default App;
-
 
