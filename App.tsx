@@ -292,6 +292,15 @@ const App: React.FC = () => {
             <a href="#info" className="hover:text-red-600 transition-colors">{t.nav.info}</a>
           </div>
           <div className="flex items-center gap-2 md:gap-3">
+            <a
+              href="https://quick-biz-document.vercel.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-3 py-1.5 md:py-2 rounded-full flex items-center gap-1 transition-all shadow-md hover:scale-105 text-xs md:text-sm"
+            >
+              <span>📄</span>
+              <span className="hidden md:inline">견적서 만들기</span>
+            </a>
             <a 
                href={BMC_LINK} 
                target="_blank" 
