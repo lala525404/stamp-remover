@@ -681,6 +681,23 @@ const App: React.FC = () => {
               Seal AI Pro
             </div>
           <p className="text-slate-500 text-xs font-medium">© 2025 SealNukki AI Labs. All rights reserved.</p>
+          {/* 퀵비즈 배너 */}
+          <a
+            href="https://quick-biz-document.vercel.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-between max-w-md mx-auto w-full bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl px-5 py-3 transition-all group"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 bg-blue-500 rounded-xl flex items-center justify-center text-white text-base shrink-0">📄</div>
+              <div className="text-left">
+                <div className="text-white font-bold text-sm">도장 완성! 이제 견적서에 넣어보세요</div>
+                <div className="text-slate-400 text-xs">무료 견적서·명세서 발급기 → QuickBiz Pro</div>
+              </div>
+            </div>
+            <div className="text-slate-400 group-hover:text-white transition-colors text-lg">→</div>
+          </a>
+
           <div className="flex flex-col md:flex-row justify-center gap-6 text-xs text-slate-400 items-center">
             <a href="/privacy.html" target="_blank" rel="noopener noreferrer" className="hover:text-white">{t.footer.privacy}</a>
             <a href="/terms.html" target="_blank" rel="noopener noreferrer" className="hover:text-white">{t.footer.terms}</a>
